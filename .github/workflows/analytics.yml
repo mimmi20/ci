@@ -80,8 +80,6 @@ jobs:
   phpcs:
     name: "Check Coding Standards with PHPCS"
 
-    needs: "install-status"
-
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: false
@@ -130,8 +128,6 @@ jobs:
 
   static-code-analysis:
     name: "Static Code Analysis with PHPStan"
-
-    needs: "install-status"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -184,8 +180,6 @@ jobs:
   phpmd:
     name: "Check Rules with PHPMD"
 
-    needs: "install-status"
-
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: false
@@ -236,8 +230,6 @@ jobs:
 
   rector:
     name: "Checks with Rector"
-
-    needs: "install-status"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
