@@ -12,6 +12,7 @@ on:
 jobs:
   lock:
     runs-on: "ubuntu-22.04"
+
     steps:
       - uses: "Dunning-Kruger/lock-issues@v1.1"
         with:

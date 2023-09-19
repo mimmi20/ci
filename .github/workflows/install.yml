@@ -18,13 +18,16 @@ on:
         type: string
         default: ""
 
+permissions:
+  contents: read
+
 jobs:
   install:
     name: "Install dependencies"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.3' == matrix.php-version }}
+    continue-on-error: ${{ '8.3' == matrix.php-version || '8.4' == matrix.php-version }}
 
     strategy:
       fail-fast: false
@@ -38,6 +41,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
 
         dependencies:
           - "highest"
@@ -66,14 +70,14 @@ jobs:
           phpts: "nts"
 
       - name: "Update dependencies with composer"
-        if: ${{ '8.3' != matrix.php-version }}
+        if: ${{ '8.3' != matrix.php-version && '8.4' != matrix.php-version }}
         uses: "ramsey/composer-install@2.2.0"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Update dependencies with composer"
-        if: ${{ '8.3' == matrix.php-version }}
+        if: ${{ '8.3' == matrix.php-version || '8.4' == matrix.php-version }}
         uses: "ramsey/composer-install@2.2.0"
         with:
           dependency-versions: "${{ matrix.dependencies }}"

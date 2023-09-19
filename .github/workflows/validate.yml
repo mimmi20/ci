@@ -17,6 +17,9 @@ on:
         required: true
         type: boolean
 
+permissions:
+  contents: read
+
 jobs:
   validate-composer:
     name: "Validate composer"
@@ -30,7 +33,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
 
         php-version:
           # Should use the lowest supported version
@@ -73,7 +76,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
 
     steps:
       - name: "Checkout"
@@ -101,7 +104,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
 
         php-version:
           # Should use the lowest supported version
@@ -146,7 +149,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
 
         php-version:
           # Should use the lowest supported version
