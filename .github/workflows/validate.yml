@@ -179,7 +179,7 @@ jobs:
 
       - name: "Lint PHP"
         run: |
-          curl -Ls https://github.com/overtrue/phplint/releases/download/9.0.4/phplint.phar -o /usr/local/bin/phplint
+          curl -Ls https://github.com/overtrue/phplint/releases/download/9.0.6/phplint.phar -o /usr/local/bin/phplint
           chmod +x /usr/local/bin/phplint
           /usr/local/bin/phplint -v --no-cache
 
