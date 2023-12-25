@@ -88,7 +88,36 @@ jobs:
           persist-credentials: false
 
       - name: "Run yamllint"
-        uses: "actionshub/yamllint@main"
+        uses: "actionshub/yamllint@v1.8.2"
+
+  markdownlint:
+    name: "Validate markdown files"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-22.04"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Run markdownlint"
+        uses: "DavidAnson/markdownlint-cli2-action@v14"
+        with:
+          globs: '*.md,**/*.md'
+          separator: ','
 
   lint-php:
     name: "Lint PHP"
@@ -195,6 +224,7 @@ jobs:
     needs:
       - "validate-composer"
       - "validate-yaml"
+      - "markdownlint"
       - "lint-php"
       - "php-lint-overtrue"
 
