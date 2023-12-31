@@ -74,11 +74,11 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer fix --dry-run -vv --diff"
+        run: "vendor/bin/php-cs-fixer fix --dry-run -vv --diff --show-progress=dots"
         continue-on-error: true
 
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer fix --dry-run --format=checkstyle | cs2pr"
+        run: "vendor/bin/php-cs-fixer fix --dry-run --show-progress=none --format=checkstyle | cs2pr"
 
   phpcs:
     name: "Check Coding Standards with PHPCS"
