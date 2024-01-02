@@ -226,8 +226,6 @@ jobs:
 
     if: inputs.skip-check-composer == false
 
-    needs: "analytics"
-
     strategy:
       fail-fast: false
 
