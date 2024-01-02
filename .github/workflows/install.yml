@@ -13,10 +13,6 @@ on:
       composer-options:
         required: true
         type: string
-      composer-outdated-option:
-        required: true
-        type: string
-        default: ""
 
 permissions:
   contents: read
