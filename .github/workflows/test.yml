@@ -176,7 +176,7 @@ jobs:
       - name: "Run mutation tests with infection/infection"
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ min-covered-msi }} --min-msi=${{ min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
+        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
 
   vitest:
     name: "UnitTests with vitest"
