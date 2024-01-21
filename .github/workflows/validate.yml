@@ -57,7 +57,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.28.0"
+        uses: "shivammathur/setup-php@2.29.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -122,7 +122,7 @@ jobs:
           persist-credentials: false
 
       - name: "Run markdownlint"
-        uses: "DavidAnson/markdownlint-cli2-action@v14"
+        uses: "DavidAnson/markdownlint-cli2-action@v15"
         with:
           globs: '*.md,**/*.md'
           separator: ','
@@ -157,7 +157,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.28.0"
+        uses: "shivammathur/setup-php@2.29.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, ${{ inputs.extensions }}"
@@ -202,7 +202,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.28.0"
+        uses: "shivammathur/setup-php@2.29.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -256,7 +256,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.28.0"
+        uses: "shivammathur/setup-php@2.29.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
