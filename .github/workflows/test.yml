@@ -167,6 +167,11 @@ jobs:
           flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }}"
           verbose: false
 
+      - name: "Run mutation tests with infection/infection"
+        env:
+          STRYKER_DASHBOARD_API_KEY: "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
+
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v5.0.0"
         if: inputs.upload-codeclimate == true
@@ -175,11 +180,6 @@ jobs:
         with:
           coverageLocations: ".build/coverage/clover.xml:clover"
           debug: false
-
-      - name: "Run mutation tests with infection/infection"
-        env:
-          STRYKER_DASHBOARD_API_KEY: "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
-        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
 
   vitest:
     name: "UnitTests with vitest"
