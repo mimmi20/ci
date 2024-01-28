@@ -66,7 +66,7 @@ jobs:
           tools: "composer:v2"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Validate composer.json"
@@ -166,7 +166,7 @@ jobs:
           tools: "composer:v2"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Lint PHP files"
@@ -211,7 +211,7 @@ jobs:
           tools: "composer:v2"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Lint PHP"
@@ -265,7 +265,7 @@ jobs:
           tools: "composer:v2, composer-unused"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
           debug: true
 

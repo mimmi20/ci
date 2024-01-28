@@ -64,7 +64,7 @@ jobs:
           tools: "composer:v2, cs2pr"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Update dependencies with composer"
@@ -117,7 +117,7 @@ jobs:
           tools: "composer:v2, cs2pr"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Update dependencies with composer"
@@ -168,7 +168,7 @@ jobs:
           tools: "composer:v2"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Update dependencies with composer"
@@ -219,7 +219,7 @@ jobs:
           tools: "composer:v2, phpmd"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Update dependencies with composer"
@@ -270,7 +270,7 @@ jobs:
           tools: "composer:v2"
         env:
           fail-fast: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
 
       - name: "Update dependencies with composer"
