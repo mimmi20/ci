@@ -220,8 +220,66 @@ jobs:
           chmod +x /usr/local/bin/phplint
           /usr/local/bin/phplint -v --no-cache
 
-  check-composer:
-    name: "Check composer dependencies"
+  composer-normalize:
+    name: "Check composer with composer-normalize"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: true
+
+    if: inputs.skip-validate-composer == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-22.04"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.1"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.30.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, composer-normalize"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Check composer.json"
+        run: "composer normalize --dry-run --indent-size=2 --indent-style=space"
+
+  composer-unused:
+    name: "Check composer dependencies with composer-unused"
 
     runs-on: "${{ matrix.operating-system }}"
 
@@ -278,6 +336,186 @@ jobs:
       - name: "Check composer.json"
         run: "composer-unused unused --ansi --no-progress --no-interaction --output-format=github"
 
+  composer-require-checker:
+    name: "Check composer dependencies with composer-require-checker"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: true
+
+    if: inputs.skip-check-composer == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-22.04"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.1"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.30.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, composer-require-checker"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Check composer.json"
+        run: "composer-require-checker check composer.json"
+
+  composer-dependency-analyser:
+    name: "Check composer dependencies with composer-dependency-analyser"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: true
+
+    if: inputs.skip-check-composer == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-22.04"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.1"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.30.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, composer-unused"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Check composer.json"
+        run: "composer require --no-update --no-progress --prefer-dist --prefer-stable -v --dev shipmonk/composer-dependency-analyser"
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Check composer.json"
+        run: "vendor/bin/composer-dependency-analyser"
+
+  editorconfig-checker:
+    name: "Check with editorconfig-checker"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: true
+
+    if: inputs.skip-check-composer == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-22.04"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.1"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.30.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, composer-unused"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Check composer.json"
+        run: "composer require --no-update --no-progress --prefer-dist --prefer-stable -v --dev editorconfig-checker/editorconfig-checker"
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Check composer.json"
+        run: "vendor/bin/editorconfig-checker"
+
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
   lint-status:
@@ -293,7 +531,7 @@ jobs:
       - "markdownlint"
       - "lint-php"
       - "php-lint-overtrue"
-      - "check-composer"
+      - "composer-unused"
 
     steps:
       - name: Failing run
