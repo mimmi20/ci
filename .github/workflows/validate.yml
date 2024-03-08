@@ -395,7 +395,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Check composer.json"
-        run: "vendor/bin/composer-dependency-analyser --verbose --ignore-dev-in-prod-deps"
+        run: "vendor/bin/composer-dependency-analyser --verbose --ignore-dev-in-prod-deps --ignore-unknown-classes"
 
   editorconfig-checker:
     name: "Check with editorconfig-checker"
@@ -474,6 +474,7 @@ jobs:
       - "lint-php"
       - "php-lint-overtrue"
       - "composer-unused"
+      - "composer-dependency-analyser"
 
     steps:
       - name: Failing run
