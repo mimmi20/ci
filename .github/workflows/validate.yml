@@ -456,7 +456,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Check composer.json"
-        run: "vendor/bin/ec -exclude phpmd\.ruleset\.xml"
+        run: "vendor/bin/ec -exclude phpmd\\.ruleset\\.xml"
 
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
