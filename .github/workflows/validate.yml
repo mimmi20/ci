@@ -446,7 +446,7 @@ jobs:
           phpts: "nts"
           debug: true
 
-      - name: "Check composer.json"
+      - name: "Update composer.json"
         run: "composer require --no-update --no-progress --prefer-dist --prefer-stable -v --dev editorconfig-checker/editorconfig-checker"
 
       - name: "Update dependencies with composer"
@@ -456,7 +456,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Check composer.json"
-        run: "vendor/bin/editorconfig-checker"
+        run: "vendor/bin/ec"
 
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
