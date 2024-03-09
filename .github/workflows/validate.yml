@@ -22,6 +22,10 @@ on:
       skip-check-composer:
         required: true
         type: boolean
+      dependency-analyser-options:
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -395,7 +399,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Check composer.json"
-        run: "vendor/bin/composer-dependency-analyser --verbose --ignore-dev-in-prod-deps --ignore-unknown-classes"
+        run: "vendor/bin/composer-dependency-analyser --verbose ${{ inputs.dependency-analyser-options }}"
 
   editorconfig-checker:
     name: "Check with editorconfig-checker"
