@@ -95,7 +95,7 @@ jobs:
     timeout-minutes: 10
     # continue-on-error: ${{ '8.4' == matrix.php-version }}
 
-    if: inputs.skip-php-install == false
+    if: inputs.skip-npm-install == false
 
     strategy:
       fail-fast: false
