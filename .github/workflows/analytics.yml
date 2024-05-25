@@ -126,6 +126,15 @@ jobs:
           dependency-versions: "lowest"
           composer-options: "${{ inputs.composer-options }}"
 
+      - name: "Enable annotations for validation errors and warnings"
+        uses: "korelstar/xmllint-problem-matcher@v1"
+
+      - name: "Validate phpcs.xml"
+        uses: "ChristophWurst/xmllint-action@v1"
+        with:
+          xml-file: "phpcs.xml"
+          xml-schema-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
+
       - name: "Run squizlabs/php_codesniffer"
         run: "vendor/bin/phpcs --report=checkstyle -q | cs2pr"
 
