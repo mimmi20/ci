@@ -247,7 +247,6 @@ jobs:
           - "8.3"
 
         dependencies:
-          - "highest"
           - "lowest"
 
     steps:
