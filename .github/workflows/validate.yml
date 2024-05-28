@@ -231,7 +231,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: true
+    continue-on-error: false
 
     if: inputs.skip-validate-composer == false
 
