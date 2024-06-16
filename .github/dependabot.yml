@@ -19,15 +19,11 @@ updates:
       # Specify a name for the group, which will be used in pull request titles
       # and branch names
       minor-patch-dependencies:
+        applies-to: "version-updates"
         # Define patterns to include dependencies in the group (based on
         # dependency name)
         patterns:
           - "*"
-        # update-types:
-        #   - "minor"
-        #   - "patch"
-        # exclude-patterns:
-        #   - "gc_ruboconfig"
 
     open-pull-requests-limit: 10
 
@@ -43,7 +39,10 @@ updates:
     target-branch: "master"
 
     commit-message:
-      prefix: "github-actions"
+      prefix: "github-actions (master)"
+
+    # Disable rebasing for all pull requests
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "github-actions"
 
@@ -59,15 +58,11 @@ updates:
       # Specify a name for the group, which will be used in pull request titles
       # and branch names
       minor-patch-dependencies:
+        applies-to: "version-updates"
         # Define patterns to include dependencies in the group (based on
         # dependency name)
         patterns:
           - "*"
-        # update-types:
-        #   - "minor"
-        #   - "patch"
-        # exclude-patterns:
-        #   - "gc_ruboconfig"
 
     open-pull-requests-limit: 10
 
@@ -83,4 +78,7 @@ updates:
     target-branch: "8.1"
 
     commit-message:
-      prefix: "github-actions"
+      prefix: "github-actions (8.1)"
+
+    # Disable rebasing for all pull requests
+    rebase-strategy: "disabled"
