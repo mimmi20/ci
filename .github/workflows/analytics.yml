@@ -22,6 +22,10 @@ on:
       skip-phpmd:
         required: true
         type: boolean
+      phpcs-options:
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -136,7 +140,7 @@ jobs:
           xml-schema-file: "vendor/squizlabs/php_codesniffer/phpcs.xsd"
 
       - name: "Run squizlabs/php_codesniffer"
-        run: "vendor/bin/phpcs --report=checkstyle -q | cs2pr"
+        run: "vendor/bin/phpcs --report=checkstyle -q ${{ inputs.phpcs-options }} | cs2pr"
 
   static-code-analysis:
     name: "Static Code Analysis with PHPStan"
