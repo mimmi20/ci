@@ -22,6 +22,10 @@ on:
       skip-check-composer:
         required: true
         type: boolean
+      skip-ec-checker:
+        required: false
+        type: boolean
+        default: false
       dependency-analyser-options:
         required: false
         type: string
@@ -407,7 +411,7 @@ jobs:
 
     continue-on-error: true
 
-    if: inputs.skip-phplint == false
+    if: inputs.skip-ec-checker == false
 
     strategy:
       fail-fast: false
