@@ -167,8 +167,6 @@ updates:
     labels:
       - "dependencies"
 
-    versioning-strategy: "increase"
-
     target-branch: "master"
 
     commit-message:
@@ -338,8 +336,6 @@ updates:
 
     labels:
       - "dependencies"
-
-    versioning-strategy: "increase"
 
     target-branch: "8.1"
 
