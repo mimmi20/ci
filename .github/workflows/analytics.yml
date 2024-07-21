@@ -44,6 +44,7 @@ jobs:
       matrix:
         operating-system:
           - "ubuntu-22.04"
+          - "ubuntu-24.04"
 
         php-version:
           # Should use the lowest supported version
@@ -97,6 +98,7 @@ jobs:
       matrix:
         operating-system:
           - "ubuntu-22.04"
+          - "ubuntu-24.04"
 
         php-version:
           # Should use the lowest supported version
@@ -157,6 +159,7 @@ jobs:
       matrix:
         operating-system:
           - "ubuntu-22.04"
+          - "ubuntu-24.04"
 
         php-version:
           # Should use the lowest supported version
@@ -208,6 +211,7 @@ jobs:
       matrix:
         operating-system:
           - "ubuntu-22.04"
+          - "ubuntu-24.04"
 
         php-version:
           # Should use the lowest supported version
@@ -304,7 +308,7 @@ jobs:
   analytics-status:
     name: "Status Analytics"
 
-    runs-on: "ubuntu-22.04"
+    runs-on: "ubuntu-24.04"
 
     if: always()
 
