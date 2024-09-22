@@ -4,9 +4,8 @@ on:
   workflow_call:
     inputs:
       extensions:
-        required: false
+        required: true
         type: string
-        default: ""
       ini-values:
         required: true
         type: string
@@ -23,9 +22,8 @@ on:
         required: true
         type: boolean
       phpcs-options:
-        required: false
+        required: true
         type: string
-        default: ""
 
 permissions:
   contents: read
