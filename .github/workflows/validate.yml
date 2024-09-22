@@ -4,9 +4,8 @@ on:
   workflow_call:
     inputs:
       extensions:
-        required: false
+        required: true
         type: string
-        default: ""
       ini-values:
         required: true
         type: string
@@ -16,6 +15,12 @@ on:
       skip-validate-composer:
         required: true
         type: boolean
+      skip-validate-yaml:
+        required: true
+        type: boolean
+      skip-validate-md:
+        required: true
+        type: boolean
       skip-phplint:
         required: true
         type: boolean
@@ -23,13 +28,11 @@ on:
         required: true
         type: boolean
       skip-ec-checker:
-        required: false
+        required: true
         type: boolean
-        default: false
       dependency-analyser-options:
-        required: false
+        required: true
         type: string
-        default: ""
 
 permissions:
   contents: read
@@ -88,6 +91,8 @@ jobs:
     timeout-minutes: 10
     continue-on-error: false
 
+    if: inputs.skip-validate-yaml == false
+
     strategy:
       fail-fast: false
 
@@ -114,6 +119,8 @@ jobs:
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: false
+
+    if: inputs.skip-validate-md == false
 
     strategy:
       fail-fast: false
@@ -489,6 +496,7 @@ jobs:
       - "composer-normalize"
       - "composer-unused"
       - "composer-dependency-analyser"
+      - "editorconfig-checker"
 
     steps:
       - name: Failing run

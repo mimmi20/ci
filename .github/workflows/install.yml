@@ -4,9 +4,8 @@ on:
   workflow_call:
     inputs:
       extensions:
-        required: false
+        required: true
         type: string
-        default: ""
       ini-values:
         required: true
         type: string
@@ -119,6 +118,7 @@ jobs:
           - "22.6"
           - "22.7"
           - "22.8"
+          - "22.9"
 
     steps:
       - name: "Checkout"
