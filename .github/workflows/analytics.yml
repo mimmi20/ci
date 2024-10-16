@@ -345,7 +345,7 @@ jobs:
       - name: "install dependencies"
         run: "npm install"
 
-      - name: "run eslint"
+      - name: "run prettier"
         run: "npm run prettier"
 
   eslint:
@@ -429,7 +429,7 @@ jobs:
       - name: "install dependencies"
         run: "npm install"
 
-      - name: "run eslint"
+      - name: "run stylelint"
         run: "npm run stylelint"
 
   # This is a meta job to avoid to have to constantly change the protection rules
