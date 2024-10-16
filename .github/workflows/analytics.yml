@@ -343,6 +343,9 @@ jobs:
           node-version: "${{ matrix.node-version }}"
 
       - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run prettier"
         run: "npm run prettier"
 
   eslint:
@@ -382,6 +385,9 @@ jobs:
           node-version: "${{ matrix.node-version }}"
 
       - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run eslint"
         run: "npm run eslint"
 
   stylelint:
@@ -421,6 +427,9 @@ jobs:
           node-version: "${{ matrix.node-version }}"
 
       - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run stylelint"
         run: "npm run stylelint"
 
   # This is a meta job to avoid to have to constantly change the protection rules
