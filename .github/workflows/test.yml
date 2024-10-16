@@ -1,0 +1,370 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      extensions:
+        required: false
+        type: string
+        default: ""
+      ini-values:
+        required: true
+        type: string
+      coverage:
+        required: true
+        type: string
+      composer-options:
+        required: true
+        type: string
+      test-name:
+        required: true
+        type: string
+      min-msi:
+        required: true
+        type: number
+      min-covered-msi:
+        required: true
+        type: number
+      skip-phpunit:
+        required: true
+        type: boolean
+      skip-vitest:
+        required: true
+        type: boolean
+      skip-stryker:
+        required: true
+        type: boolean
+      upload-codecov:
+        required: true
+        type: boolean
+      upload-codeclimate:
+        required: true
+        type: boolean
+      upload-coveralls:
+        required: true
+        type: boolean
+      upload-flag:
+        required: true
+        type: string
+    secrets:
+      ENV_CODECLIMATE_API_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    name: "UnitTests with PHPUnit"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: false
+
+    if: inputs.skip-phpunit == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-24.04"
+
+        php-version:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+
+        dependencies:
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.31.1"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Run unit tests with phpunit/phpunit${{ inputs.test-name }}"
+        run: "vendor/bin/phpunit -c phpunit.xml --no-coverage --display-warnings --display-deprecations"
+
+      - name: "Enable annotations for validation errors and warnings"
+        uses: "korelstar/xmllint-problem-matcher@v1"
+
+      - name: "Validate phpcs.xml"
+        uses: "ChristophWurst/xmllint-action@v1"
+        with:
+          xml-file: "phpunit.xml"
+          xml-schema-file: "vendor/phpunit/phpunit/phpunit.xsd"
+
+  phpunit-code-coverage:
+    name: "Code Coverage with PHPUnit"
+
+    runs-on: "${{ matrix.operating-system }}"
+
+    timeout-minutes: 10
+
+    continue-on-error: false
+
+    if: inputs.skip-phpunit == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-24.04"
+
+        php-version:
+          - "8.1"
+
+        dependencies:
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.31.1"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "${{ inputs.coverage }}"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: true
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Create cache directory for phpunit/phpunit"
+        run: "mkdir -p .build/coverage"
+
+      - name: "Collect code coverage with Xdebug and phpunit/phpunit${{ inputs.test-name }}"
+        run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations"
+
+      - name: "Upload coverage to Codecov"
+        uses: "codecov/codecov-action@v4.5.0"
+        if: inputs.upload-codecov == true
+        with:
+          file: ".build/coverage/clover.xml"
+          flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+        env:
+          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
+
+      - name: "Upload coverage to Codeclimate"
+        uses: "paambaati/codeclimate-action@v9.0.0"
+        if: inputs.upload-codeclimate == true
+        env:
+          CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
+        with:
+          coverageLocations: ".build/coverage/clover.xml:clover"
+          debug: false
+
+      - name: "Upload coverage to Coveralls"
+        uses: "coverallsapp/github-action@v2"
+        if: inputs.upload-coveralls == true
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          flag-name: "php ${{ matrix.php-version }} on ${{ matrix.operating-system }}"
+          parallel: true
+          file: ".build/coverage/clover.xml"
+          format: "clover"
+          debug: false
+
+      - name: "Run mutation tests with infection/infection"
+        env:
+          STRYKER_DASHBOARD_API_KEY: "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
+
+  vitest:
+    name: "UnitTests with vitest"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    if: inputs.skip-vitest == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-24.04"
+
+        node-version:
+          - "22"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "Run tests and generate coverage report${{ inputs.test-name }}"
+        run: "npm run coverage"
+
+      - name: "Upload coverage report to Codecov"
+        uses: "codecov/codecov-action@v4.5.0"
+        if: inputs.upload-codecov == true
+        with:
+          fail_ci_if_error: true
+          file: ".reports/clover.xml"
+          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+        env:
+          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
+
+      - name: "Upload coverage to Codeclimate"
+        uses: "paambaati/codeclimate-action@v9.0.0"
+        if: inputs.upload-codeclimate == true
+        env:
+          CC_TEST_REPORTER_ID: "${{ secrets.CODECLIMATE_API_KEY }}"
+        with:
+          coverageLocations: ".reports/clover.xml:clover"
+          debug: false
+
+      - name: "Upload coverage to Coveralls"
+        uses: "coverallsapp/github-action@v2"
+        if: inputs.upload-coveralls == true
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          flag-name: "nodeJS ${{ matrix.node-version }} on ${{ matrix.operating-system }}"
+          parallel: true
+          file: ".reports/clover.xml"
+          format: "clover"
+          debug: false
+
+  stryker:
+    name: "UnitTests with stryker"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    if: inputs.skip-stryker == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-24.04"
+
+        node-version:
+          - "22"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install --frozen-lockfile"
+
+      - name: "Run tests and generate coverage report${{ inputs.test-name }}"
+        run: "npm run coverage"
+
+      - name: "Upload coverage report to Codecov"
+        uses: "codecov/codecov-action@v4.5.0"
+        if: inputs.upload-codecov == true
+        with:
+          fail_ci_if_error: true
+          file: ".reports/clover.xml"
+          flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+
+      - name: "Upload coverage to Codeclimate"
+        uses: "paambaati/codeclimate-action@v9.0.0"
+        if: inputs.upload-codeclimate == true
+        env:
+          CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
+        with:
+          coverageLocations: ".reports/clover.xml:clover"
+          debug: false
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  tests-status:
+    name: "Unit & Integration Tests Status"
+
+    runs-on: "ubuntu-24.04"
+
+    if: always()
+
+    needs:
+      - "phpunit"
+      - "phpunit-code-coverage"
+      - "vitest"
+      - "stryker"
+
+    steps:
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
