@@ -46,9 +46,6 @@ on:
       upload-flag:
         required: true
         type: string
-    secrets:
-      ENV_CODECLIMATE_API_KEY:
-        required: true
 
 permissions:
   contents: read
@@ -214,6 +211,19 @@ jobs:
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
         run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
+
+  finish-code-coverage:
+    runs-on: "ubuntu-24.04"
+
+    needs: "phpunit-code-coverage"
+
+    if: always()
+
+    steps:
+      - name: "Coveralls Finished"
+        uses: "coverallsapp/github-action@v2"
+        with:
+          parallel-finished: true
 
   vitest:
     name: "UnitTests with vitest"
