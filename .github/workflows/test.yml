@@ -46,9 +46,6 @@ on:
       upload-flag:
         required: true
         type: string
-    secrets:
-      ENV_CODECLIMATE_API_KEY:
-        required: true
 
 permissions:
   contents: read
