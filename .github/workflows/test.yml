@@ -49,6 +49,10 @@ on:
     secrets:
       ENV_CODECLIMATE_API_KEY:
         required: true
+      ENV_CODECOV_TOKEN:
+        required: true
+      ENV_STRYKER_DASHBOARD_API_KEY:
+        required: true
 
 permissions:
   contents: read
@@ -186,7 +190,7 @@ jobs:
           flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
         env:
-          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
@@ -210,7 +214,7 @@ jobs:
 
       - name: "Run mutation tests with infection/infection"
         env:
-          STRYKER_DASHBOARD_API_KEY: "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+          STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
         run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv"
 
   finish-code-coverage:
@@ -277,7 +281,7 @@ jobs:
           flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
         env:
-          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
