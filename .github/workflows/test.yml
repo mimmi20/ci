@@ -177,7 +177,7 @@ jobs:
         run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations"
 
       - name: "Upload coverage to Codecov"
-        uses: "codecov/codecov-action@v4.5.0"
+        uses: "codecov/codecov-action@v4.6.0"
         if: inputs.upload-codecov == true
         with:
           file: ".build/coverage/clover.xml"
@@ -267,7 +267,7 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v4.5.0"
+        uses: "codecov/codecov-action@v4.6.0"
         if: inputs.upload-codecov == true
         with:
           fail_ci_if_error: true
@@ -337,7 +337,7 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v4.5.0"
+        uses: "codecov/codecov-action@v4.6.0"
         if: inputs.upload-codecov == true
         with:
           fail_ci_if_error: true
