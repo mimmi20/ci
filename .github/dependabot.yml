@@ -12,6 +12,16 @@ updates:
     schedule:
       interval: "daily"
 
+    groups:
+      # Specify a name for the group, which will be used in pull request titles
+      # and branch names
+      minor-patch-dependencies:
+        applies-to: "version-updates"
+        # Define patterns to include dependencies in the group (based on
+        # dependency name)
+        patterns:
+          - "*"
+
     open-pull-requests-limit: 10
 
     reviewers:
@@ -29,7 +39,7 @@ updates:
       prefix: "github-actions (master)"
 
     # Disable rebasing for all pull requests
-    rebase-strategy: "auto"
+    rebase-strategy: "disabled"
 
   - package-ecosystem: "github-actions"
 
@@ -37,6 +47,16 @@ updates:
 
     schedule:
       interval: "daily"
+
+    groups:
+      # Specify a name for the group, which will be used in pull request titles
+      # and branch names
+      minor-patch-dependencies:
+        applies-to: "version-updates"
+        # Define patterns to include dependencies in the group (based on
+        # dependency name)
+        patterns:
+          - "*"
 
     open-pull-requests-limit: 10
 
@@ -55,4 +75,4 @@ updates:
       prefix: "github-actions (8.1)"
 
     # Disable rebasing for all pull requests
-    rebase-strategy: "auto"
+    rebase-strategy: "disabled"
