@@ -12,6 +12,12 @@ on:
       composer-options:
         required: true
         type: string
+      skip-php-cs-fixer:
+        required: true
+        type: boolean
+      skip-phpcs:
+        required: true
+        type: boolean
       skip-phpstan:
         required: true
         type: boolean
@@ -44,6 +50,8 @@ jobs:
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: false
+
+    if: inputs.skip-php-cs-fixer == false
 
     strategy:
       fail-fast: false
@@ -97,6 +105,8 @@ jobs:
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: false
+
+    if: inputs.skip-phpcs == false
 
     strategy:
       fail-fast: false
