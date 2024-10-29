@@ -77,7 +77,7 @@ jobs:
           - "ubuntu-24.04"
 
         php-version:
-          - "8.3"
+          - "8.4"
 
         dependencies:
           - "lowest"
@@ -136,7 +136,7 @@ jobs:
           - "ubuntu-24.04"
 
         php-version:
-          - "8.3"
+          - "8.4"
 
         dependencies:
           - "lowest"
