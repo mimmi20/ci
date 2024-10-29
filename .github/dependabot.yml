@@ -76,3 +76,39 @@ updates:
 
     # Disable rebasing for all pull requests
     rebase-strategy: "disabled"
+
+  - package-ecosystem: "github-actions"
+
+    directory: "/"
+
+    schedule:
+      interval: "daily"
+
+    groups:
+      # Specify a name for the group, which will be used in pull request titles
+      # and branch names
+      minor-patch-dependencies:
+        applies-to: "version-updates"
+        # Define patterns to include dependencies in the group (based on
+        # dependency name)
+        patterns:
+          - "*"
+
+    open-pull-requests-limit: 10
+
+    reviewers:
+      - "mimmi20"
+
+    assignees:
+      - "mimmi20"
+
+    labels:
+      - "dependencies"
+
+    target-branch: "8.3"
+
+    commit-message:
+      prefix: "github-actions (8.3)"
+
+    # Disable rebasing for all pull requests
+    rebase-strategy: "disabled"
