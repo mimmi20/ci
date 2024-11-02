@@ -218,7 +218,7 @@ jobs:
 
     needs: "phpunit-code-coverage"
 
-    if: always()
+    if: inputs.upload-coveralls == true
 
     steps:
       - name: "Coveralls Finished"
