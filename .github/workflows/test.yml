@@ -179,12 +179,14 @@ jobs:
         run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations"
 
       - name: "Upload coverage to Codecov"
-        uses: "codecov/codecov-action@v4.6.0"
+        uses: "codecov/codecov-action@v5.0.0"
         if: inputs.upload-codecov == true
         with:
-          file: ".build/coverage/clover.xml"
+          files: ".build/coverage/clover.xml"
           flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
+          disable_search: true
+          disable_file_fixes: true
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
@@ -269,13 +271,14 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v4.6.0"
+        uses: "codecov/codecov-action@v5.0.0"
         if: inputs.upload-codecov == true
         with:
-          fail_ci_if_error: true
-          file: ".reports/clover.xml"
+          files: ".reports/clover.xml"
           flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
+          disable_search: true
+          disable_file_fixes: true
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
@@ -339,13 +342,14 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v4.6.0"
+        uses: "codecov/codecov-action@v5.0.0"
         if: inputs.upload-codecov == true
         with:
-          fail_ci_if_error: true
-          file: ".reports/clover.xml"
+          files: ".reports/clover.xml"
           flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
+          disable_search: true
+          disable_file_fixes: true
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
