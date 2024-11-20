@@ -288,16 +288,16 @@ jobs:
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
-#      - name: "Upload test results to Codecov"
-#        if: ${{ inputs.upload-codecov == true && !cancelled() }}
-#        uses: "codecov/test-results-action@v1"
-#        with:
-#          files: ".reports/junit.xml"
-#          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
-#          verbose: false
-#          disable_search: true
-#        env:
-#          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+      - name: "Upload test results to Codecov"
+        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+        uses: "codecov/test-results-action@v1"
+        with:
+          files: "./junit-report.xml"
+          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+          disable_search: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
