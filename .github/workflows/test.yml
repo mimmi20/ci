@@ -187,6 +187,17 @@ jobs:
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
+      - name: "Upload test results to Codecov"
+        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+        uses: "codecov/test-results-action@v1"
+        with:
+          files: ".build/coverage/phpunit.junit.xml"
+          flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+          disable_search: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
         if: inputs.upload-codeclimate == true
@@ -279,6 +290,17 @@ jobs:
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
+#      - name: "Upload test results to Codecov"
+#        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+#        uses: "codecov/test-results-action@v1"
+#        with:
+#          files: ".reports/junit.xml"
+#          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+#          verbose: false
+#          disable_search: true
+#        env:
+#          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
         if: inputs.upload-codeclimate == true
@@ -349,6 +371,17 @@ jobs:
           disable_file_fixes: true
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
+#      - name: "Upload test results to Codecov"
+#        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+#        uses: "codecov/test-results-action@v1"
+#        with:
+#          files: ".reports/junit.xml"
+#          flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+#          verbose: false
+#          disable_search: true
+#        env:
+#          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
