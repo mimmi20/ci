@@ -103,7 +103,7 @@ jobs:
     name: "Check Coding Standards with PHPCS"
 
     runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
+    timeout-minutes: 30
     continue-on-error: false
 
     if: inputs.skip-phpcs == false
