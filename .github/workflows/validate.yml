@@ -109,7 +109,7 @@ jobs:
           persist-credentials: false
 
       - name: "Run yamllint"
-        uses: "actionshub/yamllint@v1.8.2"
+        uses: "actionshub/yamllint@v1.8.3"
 
   markdownlint:
     name: "Validate markdown files"
