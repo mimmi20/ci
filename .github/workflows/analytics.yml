@@ -24,9 +24,6 @@ on:
       skip-rector:
         required: true
         type: boolean
-      skip-phpmd:
-        required: true
-        type: boolean
       phpcs-options:
         required: true
         type: string
@@ -208,57 +205,6 @@ jobs:
 
       - name: "Run phpstan/phpstan"
         run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress"
-
-  phpmd:
-    name: "Check Rules with PHPMD"
-
-    runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
-    continue-on-error: false
-
-    if: inputs.skip-phpmd == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-24.04"
-
-        php-version:
-          # Should use the lowest supported version
-          - "8.3"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.31.1"
-        with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
-          ini-values: "${{ inputs.ini-values }}"
-          coverage: "none"
-          tools: "composer:v2, phpmd"
-        env:
-          fail-fast: true
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          phpts: "nts"
-
-      - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.0.0"
-        with:
-          dependency-versions: "lowest"
-          composer-options: "${{ inputs.composer-options }}"
-
-      - name: "Run phpmd/phpmd"
-        run: "phpmd src github phpmd.ruleset.xml"
 
   rector:
     name: "Checks with Rector"
@@ -454,7 +400,6 @@ jobs:
       - "php-cs-fixer"
       - "phpcs"
       - "static-code-analysis"
-      - "phpmd"
       - "rector"
       - "prettier"
       - "eslint"
