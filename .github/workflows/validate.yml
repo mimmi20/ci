@@ -292,8 +292,8 @@ jobs:
       - name: "Check composer.json"
         run: "composer-normalize --dry-run --indent-size=2 --indent-style=space"
 
-  composer-unused:
-    name: "Check composer dependencies with composer-unused"
+  composer-dependency-analyser:
+    name: "Check composer dependencies with composer-dependency-analyser"
 
     runs-on: "${{ matrix.operating-system }}"
 
@@ -333,64 +333,7 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, composer-unused"
-        env:
-          fail-fast: true
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          phpts: "nts"
-          debug: true
-
-      - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.0.0"
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
-
-      - name: "Check composer.json"
-        run: "composer-unused unused --ansi --no-progress --no-interaction --output-format=github"
-
-  composer-dependency-analyser:
-    name: "Check composer dependencies with composer-dependency-analyser"
-
-    runs-on: "${{ matrix.operating-system }}"
-
-    timeout-minutes: 10
-
-    continue-on-error: true
-
-    if: inputs.skip-check-composer == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-24.04"
-
-        php-version:
-          # Should use the lowest supported version
-          - "8.1"
-
-        dependencies:
-          - "lowest"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.31.1"
-        with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
-          ini-values: "${{ inputs.ini-values }}"
-          coverage: "none"
-          tools: "composer:v2, composer-unused"
+          tools: "composer:v2"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -450,7 +393,7 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, composer-unused"
+          tools: "composer:v2"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -485,7 +428,6 @@ jobs:
       - "lint-php"
       - "php-lint-overtrue"
       - "composer-normalize"
-      - "composer-unused"
       - "composer-dependency-analyser"
       - "editorconfig-checker"
 
