@@ -12,16 +12,6 @@ updates:
     schedule:
       interval: "daily"
 
-    groups:
-      # Specify a name for the group, which will be used in pull request titles
-      # and branch names
-      minor-patch-dependencies:
-        applies-to: "version-updates"
-        # Define patterns to include dependencies in the group (based on
-        # dependency name)
-        patterns:
-          - "*"
-
     open-pull-requests-limit: 10
 
     reviewers:
@@ -38,6 +28,10 @@ updates:
     commit-message:
       prefix: "github-actions (master)"
 
+    ignore:
+      - dependency-name: "mimmi20/ci"
+      - dependency-name: "release-drafter/release-drafter"
+
     # Disable rebasing for all pull requests
     rebase-strategy: "disabled"
 
@@ -47,16 +41,6 @@ updates:
 
     schedule:
       interval: "daily"
-
-    groups:
-      # Specify a name for the group, which will be used in pull request titles
-      # and branch names
-      minor-patch-dependencies:
-        applies-to: "version-updates"
-        # Define patterns to include dependencies in the group (based on
-        # dependency name)
-        patterns:
-          - "*"
 
     open-pull-requests-limit: 10
 
@@ -74,6 +58,10 @@ updates:
     commit-message:
       prefix: "github-actions (8.1)"
 
+    ignore:
+      - dependency-name: "mimmi20/ci"
+      - dependency-name: "release-drafter/release-drafter"
+
     # Disable rebasing for all pull requests
     rebase-strategy: "disabled"
 
@@ -83,16 +71,6 @@ updates:
 
     schedule:
       interval: "daily"
-
-    groups:
-      # Specify a name for the group, which will be used in pull request titles
-      # and branch names
-      minor-patch-dependencies:
-        applies-to: "version-updates"
-        # Define patterns to include dependencies in the group (based on
-        # dependency name)
-        patterns:
-          - "*"
 
     open-pull-requests-limit: 10
 
@@ -109,6 +87,10 @@ updates:
 
     commit-message:
       prefix: "github-actions (8.3)"
+
+    ignore:
+      - dependency-name: "mimmi20/ci"
+      - dependency-name: "release-drafter/release-drafter"
 
     # Disable rebasing for all pull requests
     rebase-strategy: "disabled"
