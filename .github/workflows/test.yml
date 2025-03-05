@@ -106,7 +106,7 @@ jobs:
           debug: true
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.0.0"
+        uses: "ramsey/composer-install@3.0.1"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
@@ -162,7 +162,7 @@ jobs:
           debug: true
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.0.0"
+        uses: "ramsey/composer-install@3.0.1"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
