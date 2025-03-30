@@ -189,6 +189,7 @@ jobs:
 
       - name: "Upload test results to Codecov"
         if: ${{ inputs.upload-codecov == true && !cancelled() }}
+        continue-on-error: true
         uses: "codecov/test-results-action@v1"
         with:
           files: ".build/coverage/phpunit.junit.xml"
@@ -201,6 +202,7 @@ jobs:
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
         if: inputs.upload-codeclimate == true
+        continue-on-error: true
         env:
           CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
         with:
@@ -210,6 +212,7 @@ jobs:
       - name: "Upload coverage to Coveralls"
         uses: "coverallsapp/github-action@v2"
         if: inputs.upload-coveralls == true
+        continue-on-error: true
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           flag-name: "php ${{ matrix.php-version }} on ${{ matrix.operating-system }}"
@@ -293,6 +296,7 @@ jobs:
 
       - name: "Upload test results to Codecov"
         if: ${{ inputs.upload-codecov == true && !cancelled() }}
+        continue-on-error: true
         uses: "codecov/test-results-action@v1"
         with:
           files: "./junit-report.xml"
@@ -305,6 +309,7 @@ jobs:
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
         if: inputs.upload-codeclimate == true
+        continue-on-error: true
         env:
           CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
         with:
@@ -314,6 +319,7 @@ jobs:
       - name: "Upload coverage to Coveralls"
         uses: "coverallsapp/github-action@v2"
         if: inputs.upload-coveralls == true
+        continue-on-error: true
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           flag-name: "nodeJS ${{ matrix.node-version }} on ${{ matrix.operating-system }}"
@@ -365,6 +371,7 @@ jobs:
       - name: "Upload coverage report to Codecov"
         uses: "codecov/codecov-action@v5.4.0"
         if: inputs.upload-codecov == true
+        continue-on-error: true
         with:
           files: ".reports/clover.xml"
           flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
@@ -388,6 +395,7 @@ jobs:
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
         if: inputs.upload-codeclimate == true
+        continue-on-error: true
         env:
           CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
         with:
@@ -397,6 +405,7 @@ jobs:
       - name: "Upload coverage to Coveralls"
         uses: "coverallsapp/github-action@v2"
         if: inputs.upload-coveralls == true
+        continue-on-error: true
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           flag-name: "nodeJS ${{ matrix.node-version }} on ${{ matrix.operating-system }}"
