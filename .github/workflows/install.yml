@@ -18,6 +18,14 @@ on:
       skip-npm-install:
         required: true
         type: boolean
+      skip-nasm-install:
+        required: false
+        type: boolean
+        default: true
+      skip-libimagequant-install:
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -143,8 +151,13 @@ jobs:
           lfs: false
           persist-credentials: false
 
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
       - name: "install libimagequant-dev"
         run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
