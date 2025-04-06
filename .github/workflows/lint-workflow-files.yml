@@ -24,6 +24,9 @@ jobs:
       - name: "install libimagequant-dev"
         run: "sudo apt-get install libimagequant-dev -y"
 
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+
       - name: "Use Node.js 22"
         uses: "actions/setup-node@v4"
         with:
