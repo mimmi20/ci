@@ -306,6 +306,10 @@ jobs:
         run: "sudo apt-get install libimagequant-dev -y"
         if: inputs.skip-libimagequant-install == false
 
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
         with:
@@ -354,6 +358,10 @@ jobs:
         run: "sudo apt-get install libimagequant-dev -y"
         if: inputs.skip-libimagequant-install == false
 
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
         with:
@@ -400,6 +408,10 @@ jobs:
 
       - name: "install libimagequant-dev"
         run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
         if: inputs.skip-libimagequant-install == false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
