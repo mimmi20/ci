@@ -244,6 +244,7 @@ jobs:
     steps:
       - name: "Coveralls Finished"
         uses: "coverallsapp/github-action@v2"
+        continue-on-error: true
         with:
           parallel-finished: true
 
