@@ -7,7 +7,7 @@ on:
 
 jobs:
   actionlint:
-    uses: "lint-actions.yml@8.3"
+    uses: "./.github/workflows/lint-actions.yml"
     with:
       skip-nasm-install: true
       skip-libimagequant-install: true
