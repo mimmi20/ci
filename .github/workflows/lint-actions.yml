@@ -1,0 +1,67 @@
+name: "Lint GitHub Actions workflows"
+
+on:
+  workflow_call:
+    inputs:
+      skip-nasm-install:
+        required: false
+        type: boolean
+        default: true
+      skip-libimagequant-install:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: "Install Node dependencies"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-24.04"
+
+        node-version:
+          - "22"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "Check workflow files"
+        uses: "raven-actions/actionlint@v2"
+        with:
+          matcher: true
+          cache: true
+          fail-on-error: false
+          flags: "-ignore SC2086"
