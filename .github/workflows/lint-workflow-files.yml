@@ -7,35 +7,7 @@ on:
 
 jobs:
   actionlint:
-    runs-on: "ubuntu-24.04"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Use Node.js 22"
-        uses: "actions/setup-node@v4"
-        with:
-          node-version: "22"
-
-      - name: "Set up NASM (for imagemin binary builds)"
-        uses: "ilammy/setup-nasm@v1"
-
-      - name: "install libimagequant-dev"
-        run: "sudo apt-get install libimagequant-dev -y"
-
-      - name: "install libpng-dev"
-        run: "sudo apt-get install libpng-dev -y"
-
-      - name: "Check workflow files"
-        uses: "raven-actions/actionlint@v2"
-        with:
-          matcher: true
-          cache: true
-          fail-on-error: false
-          flags: "-ignore SC2086"
+    uses: "./lint-actions.yml"
+    with:
+      skip-nasm-install: true
+      skip-libimagequant-install: true
