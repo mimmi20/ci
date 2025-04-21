@@ -52,7 +52,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -97,7 +97,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -125,7 +125,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -156,7 +156,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -201,7 +201,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -251,7 +251,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -308,7 +308,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -368,7 +368,7 @@ jobs:
 
       matrix:
         operating-system:
-          - "ubuntu-24.04"
+          - "ubuntu-latest"
 
         php-version:
           # Should use the lowest supported version
@@ -417,7 +417,7 @@ jobs:
   lint-status:
     name: "Lint & Validate Status"
 
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-latest"
 
     if: always()
 
