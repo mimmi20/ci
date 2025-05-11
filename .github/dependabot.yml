@@ -14,9 +14,6 @@ updates:
 
     open-pull-requests-limit: 10
 
-    reviewers:
-      - "mimmi20"
-
     assignees:
       - "mimmi20"
 
@@ -44,9 +41,6 @@ updates:
 
     open-pull-requests-limit: 10
 
-    reviewers:
-      - "mimmi20"
-
     assignees:
       - "mimmi20"
 
@@ -73,9 +67,6 @@ updates:
       interval: "daily"
 
     open-pull-requests-limit: 10
-
-    reviewers:
-      - "mimmi20"
 
     assignees:
       - "mimmi20"
