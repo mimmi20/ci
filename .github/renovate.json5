@@ -49,27 +49,6 @@
   "separateMultipleMajor": true,
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies", "peerDependencies"],
-      "rangeStrategy": "widen"
-    },
-    {
-      "groupName": "all @typescript-eslint dependencies",
-      "groupSlug": "all-typescript-eslint-dependencies",
-      "matchPackageNames": [
-        "@typescript-eslint/*"
-      ],
-      "separateMultipleMajor": false
-    },
-    {
-      "matchPackageNames": [
-        "@vitest/coverage-istanbul",
-        "@vitest/ui",
-        "esbuild",
-        "vitest"
-      ],
-      "enabled": false
-    },
-    {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch-dependencies",
       "matchUpdateTypes": [
