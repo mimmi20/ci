@@ -276,7 +276,6 @@ jobs:
 
         node-version:
           - "22"
-          - "23"
           - "24"
 
     steps:
@@ -379,7 +378,6 @@ jobs:
 
         node-version:
           - "22"
-          - "23"
           - "24"
 
     steps:
