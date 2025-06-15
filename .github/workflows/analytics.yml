@@ -48,6 +48,10 @@ on:
         required: false
         type: boolean
         default: true
+      skip-libgif-install:
+        required: false
+        type: boolean
+        default: true
       skip-oxlint:
         required: false
         type: boolean
@@ -271,11 +275,11 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run checks with rector/rector"
-        run: "vendor/bin/rector process --ansi --dry-run"
+        run: "vendor/bin/rector process --ansi --dry-run --debug"
         continue-on-error: true
 
       - name: "Run checks with rector/rector"
-        run: "vendor/bin/rector process --ansi --dry-run --no-diffs"
+        run: "vendor/bin/rector process --ansi --dry-run --debug --no-diffs"
 
   prettier:
     name: "Run prettier"
@@ -321,6 +325,10 @@ jobs:
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
@@ -378,6 +386,10 @@ jobs:
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
 
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
         with:
@@ -434,6 +446,10 @@ jobs:
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
 
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
         with:
@@ -489,6 +505,10 @@ jobs:
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
