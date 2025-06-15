@@ -30,6 +30,10 @@ on:
         required: false
         type: boolean
         default: true
+      skip-libgif-install:
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -71,6 +75,10 @@ jobs:
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.34.1"
@@ -154,6 +162,10 @@ jobs:
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
         if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v4"
