@@ -225,7 +225,7 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2"
+          tools: "composer:v2, phplint"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -233,10 +233,7 @@ jobs:
           debug: false
 
       - name: "Lint PHP"
-        run: |
-          curl -Ls https://github.com/overtrue/phplint/releases/download/9.0.6/phplint.phar -o /usr/local/bin/phplint
-          chmod +x /usr/local/bin/phplint
-          /usr/local/bin/phplint -v --no-cache
+        run: "phplint -v --no-cache"
 
   composer-normalize:
     name: "Check composer with composer-normalize"
