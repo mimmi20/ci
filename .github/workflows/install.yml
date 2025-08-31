@@ -93,6 +93,7 @@ jobs:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
+          debug: false
 
       - name: "Update dependencies with composer"
         if: ${{ '8.5' != matrix.php-version }}
