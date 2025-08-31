@@ -225,7 +225,7 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2"
+          tools: "composer:v2, phplint"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -233,10 +233,7 @@ jobs:
           debug: false
 
       - name: "Lint PHP"
-        run: |
-          curl -Ls https://github.com/overtrue/phplint/releases/download/9.0.6/phplint.phar -o /usr/local/bin/phplint
-          chmod +x /usr/local/bin/phplint
-          /usr/local/bin/phplint -v --no-cache
+        run: "phplint -v --no-cache"
 
   composer-normalize:
     name: "Check composer with composer-normalize"
@@ -260,6 +257,11 @@ jobs:
           # Should use the lowest supported version
           - "8.4"
 
+        normalize-version:
+          - "2.48.0"
+          - "2.47.0"
+          - "2.46.0"
+
         dependencies:
           - "lowest"
 
@@ -273,13 +275,13 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@verbose"
+        uses: "shivammathur/setup-php@2.35.4"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, composer-normalize"
+          tools: "composer:v2, composer-normalize:${{ matrix.normalize-version }}"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
