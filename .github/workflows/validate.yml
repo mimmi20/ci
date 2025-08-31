@@ -257,11 +257,6 @@ jobs:
           # Should use the lowest supported version
           - "8.4"
 
-        normalize-version:
-          - "2.48.0"
-          - "2.47.0"
-          - "2.46.0"
-
         dependencies:
           - "lowest"
 
@@ -281,7 +276,8 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, composer-normalize:${{ matrix.normalize-version }}"
+          # @todo: change version, if error in installation is solved
+          tools: "composer:v2, composer-normalize:2.47.0"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
