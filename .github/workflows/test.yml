@@ -267,7 +267,7 @@ jobs:
         if: inputs.use-phpstan == true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
-        run: "vendor/bin/infection --show-mutations --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv --static-analysis-tool=phpstan --static-analysis-tool-options=\"-c phpstan.neon --memory-limit=768M --no-progress\""
+        run: "vendor/bin/infection --show-mutations --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress -vv --static-analysis-tool=phpstan --static-analysis-tool-options=\"--configuration=phpstan.neon --memory-limit=768M --no-progress\""
 
   finish-code-coverage:
     runs-on: "ubuntu-latest"
