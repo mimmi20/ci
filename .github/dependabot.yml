@@ -12,15 +12,14 @@ updates:
     schedule:
       interval: "daily"
 
-    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
     assignees:
       - "mimmi20"
 
     labels:
       - "dependencies"
-
-    target-branch: "master"
 
     commit-message:
       prefix: "github-actions (master)"
@@ -39,7 +38,8 @@ updates:
     schedule:
       interval: "daily"
 
-    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
     assignees:
       - "mimmi20"
@@ -66,7 +66,8 @@ updates:
     schedule:
       interval: "daily"
 
-    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
     assignees:
       - "mimmi20"
