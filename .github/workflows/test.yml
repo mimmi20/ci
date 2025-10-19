@@ -300,6 +300,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
@@ -406,6 +407,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
