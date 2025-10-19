@@ -97,7 +97,7 @@ jobs:
           - "ubuntu-latest"
 
         php-version:
-          - "8.4"
+          - "8.5"
 
         dependencies:
           - "lowest"
@@ -161,7 +161,7 @@ jobs:
           - "ubuntu-latest"
 
         php-version:
-          - "8.4"
+          - "8.5"
 
         dependencies:
           - "lowest"
@@ -300,6 +300,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
@@ -406,6 +407,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"

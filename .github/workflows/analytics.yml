@@ -79,7 +79,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -135,7 +135,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -195,7 +195,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -247,7 +247,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -304,6 +304,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
@@ -364,6 +365,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
@@ -424,6 +426,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"
@@ -484,6 +487,7 @@ jobs:
         node-version:
           - "22"
           - "24"
+          - "25"
 
     steps:
       - name: "Checkout"

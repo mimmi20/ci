@@ -56,7 +56,6 @@ jobs:
           - "ubuntu-latest"
 
         php-version:
-          - "8.4"
           - "8.5"
 
         dependencies:
@@ -149,6 +148,8 @@ jobs:
           - "24.7"
           - "24.8"
           - "24.9"
+          - "24.10"
+          - "25.0"
 
     steps:
       - name: "Checkout"
