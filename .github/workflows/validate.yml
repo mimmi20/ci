@@ -43,7 +43,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-validate-composer == false
 
@@ -148,7 +148,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-phplint == false
 
@@ -194,7 +194,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-phplint == false
 
@@ -242,7 +242,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-validate-composer == false
 
@@ -300,7 +300,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-check-composer == false
 
@@ -360,7 +360,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-ec-checker == false
 
