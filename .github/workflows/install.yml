@@ -44,7 +44,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-php-install == false
 
@@ -57,6 +57,7 @@ jobs:
 
         php-version:
           - "8.5"
+          - "8.6"
 
         dependencies:
           - "highest"
@@ -94,14 +95,14 @@ jobs:
           debug: false
 
       - name: "Update dependencies with composer"
-        if: ${{ '8.5' != matrix.php-version }}
+        if: ${{ '8.5' != matrix.php-version && '8.6' != matrix.php-version }}
         uses: "ramsey/composer-install@3.1.1"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Update dependencies with composer"
-        if: ${{ '8.5' == matrix.php-version }}
+        if: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
         uses: "ramsey/composer-install@3.1.1"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
@@ -116,7 +117,6 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    # continue-on-error: ${{ '8.4' == matrix.php-version }}
 
     if: inputs.skip-npm-install == false
 
@@ -138,6 +138,7 @@ jobs:
           - "22.18"
           - "22.19"
           - "22.20"
+          - "22.21"
           - "24.0"
           - "24.1"
           - "24.2"
