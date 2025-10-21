@@ -85,7 +85,7 @@ jobs:
 
     timeout-minutes: 30
 
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-phpunit == false
 
@@ -149,7 +149,7 @@ jobs:
 
     timeout-minutes: 30
 
-    continue-on-error: ${{ '8.5' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-phpunit == false
 
