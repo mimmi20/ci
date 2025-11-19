@@ -147,7 +147,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
 
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
@@ -256,12 +256,14 @@ jobs:
           debug: false
 
       - name: "Run mutation tests with infection/infection without PHPStan"
+        timeout-minutes: 30
         if: inputs.use-phpstan == false
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
         run: "vendor/bin/infection --show-mutations --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress --show-mutations=max -vv"
 
       - name: "Run mutation tests with infection/infection with PHPStan"
+        timeout-minutes: 30
         if: inputs.use-phpstan == true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
