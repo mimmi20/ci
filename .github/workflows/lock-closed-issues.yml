@@ -9,6 +9,9 @@ on:
     types:
       - "closed"
 
+permissions:
+  contents: read
+
 jobs:
   lock:
     runs-on: "ubuntu-latest"
