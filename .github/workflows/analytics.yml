@@ -56,6 +56,10 @@ on:
         required: false
         type: boolean
         default: true
+      skip-psalm:
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -529,6 +533,41 @@ jobs:
       - name: "run stylelint"
         run: "npm run stylelint"
 
+  psalm:
+    name: Psalm
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+
+    if: inputs.skip-psalm == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v5"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Psalm"
+        uses: "docker://ghcr.io/psalm/psalm-github-actions:6.13.1"
+        with:
+          security_analysis: true
+          report_file: "results.sarif"
+      - name: "Upload Security Analysis results to GitHub"
+        uses: "github/codeql-action/upload-sarif@v2"
+        with:
+          sarif_file: "results.sarif"
+
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
   analytics-status:
@@ -547,6 +586,7 @@ jobs:
       - "eslint"
       - "oxlint"
       - "stylelint"
+      - "psalm"
 
     steps:
       - name: Failing run
