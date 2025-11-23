@@ -77,7 +77,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
 
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 

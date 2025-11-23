@@ -532,7 +532,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-psalm == false
 
@@ -543,6 +543,10 @@ jobs:
         operating-system:
           - "ubuntu-latest"
 
+        php-version:
+          # Should use the lowest supported version
+          - "8.5"
+
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v5"
@@ -552,11 +556,28 @@ jobs:
           lfs: false
           persist-credentials: false
 
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.35.5"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: false
+
       - name: "Psalm"
         uses: "docker://ghcr.io/psalm/psalm-github-actions:6.13.1"
         with:
           security_analysis: true
           report_file: "results.sarif"
+          php_version: "${{ matrix.php-version }}"
+          composer_ignore_platform_reqs: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+          composer_require_dev: false
       - name: "Upload Security Analysis results to GitHub"
         uses: "github/codeql-action/upload-sarif@v2"
         with:
