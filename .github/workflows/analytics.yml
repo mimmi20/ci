@@ -532,7 +532,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
     if: inputs.skip-psalm == false
 
@@ -545,7 +545,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -576,7 +576,7 @@ jobs:
           security_analysis: true
           report_file: "results.sarif"
           php_version: "${{ matrix.php-version }}"
-          composer_ignore_platform_reqs: false
+          composer_ignore_platform_reqs: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
           composer_require_dev: false
       - name: "Upload Security Analysis results to GitHub"
         uses: "github/codeql-action/upload-sarif@v2"
