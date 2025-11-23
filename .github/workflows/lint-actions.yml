@@ -4,21 +4,17 @@ on:
   workflow_call:
     inputs:
       skip-nasm-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libimagequant-install:
-        required: false
+        required: true
         type: boolean
-        default: false
       skip-librabbitmq-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libgif-install:
-        required: false
+        required: true
         type: boolean
-        default: true
 
 permissions:
   contents: read
