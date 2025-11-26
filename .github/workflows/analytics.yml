@@ -58,6 +58,10 @@ on:
 permissions:
   contents: read
   security-events: read
+  id-token: read
+  issues: read
+  pull-requests: read
+  checks: read
 
 jobs:
   php-cs-fixer:
@@ -530,6 +534,16 @@ jobs:
 
   psalm:
     name: Psalm
+
+    permissions:
+      # Required when publishing results (badge / API / code scanning)
+      security-events: write
+      id-token: write
+      # Recommended reads for private repos to avoid GraphQL/SAST gaps
+      contents: read
+      issues: read
+      pull-requests: read
+      checks: read
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 60
