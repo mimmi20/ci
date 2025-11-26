@@ -580,9 +580,10 @@ jobs:
         run: "vendor/bin/psalm --report=results.sarif"
 
       - name: "Upload Security Analysis results to GitHub"
-        uses: "github/codeql-action/upload-sarif@v2"
+        uses: "github/codeql-action/upload-sarif@v4"
         with:
           sarif_file: "results.sarif"
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
