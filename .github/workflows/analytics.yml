@@ -57,6 +57,7 @@ on:
 
 permissions:
   contents: read
+  security-events: read
 
 jobs:
   php-cs-fixer:
