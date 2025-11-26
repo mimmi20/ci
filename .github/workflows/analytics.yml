@@ -570,6 +570,12 @@ jobs:
           phpts: "nts"
           debug: false
 
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@3.1.1"
+        with:
+          dependency-versions: "lowest"
+          composer-options: "${{ inputs.composer-options }}"
+
       - name: "Psalm"
         run: "vendor/bin/psalm --report=results.sarif"
 
