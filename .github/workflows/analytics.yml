@@ -51,14 +51,13 @@ on:
       skip-oxlint:
         required: true
         type: boolean
-      skip-psalm:
+      use-code-scanning:
         required: true
         type: boolean
 
 permissions:
   contents: read
   security-events: read
-#  id-token: read
   issues: read
   pull-requests: read
   checks: read
@@ -183,6 +182,14 @@ jobs:
   static-code-analysis:
     name: "Static Code Analysis with PHPStan"
 
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      issues: read
+      pull-requests: read
+      checks: read
+
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
@@ -230,7 +237,20 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress"
+        continue-on-error: ${{ inputs.use-code-scanning == true }}
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress --error-format=table"
+
+      - name: "Run phpstan/phpstan for Code Scanning"
+        if: inputs.use-code-scanning == true
+        continue-on-error: true
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress --error-format=sarif > phpstan-results.sarif"
+
+      - name: "Upload Security Analysis results to GitHub"
+        if: inputs.use-code-scanning == true
+        uses: "github/codeql-action/upload-sarif@v4"
+        with:
+          sarif_file: "phpstan-results.sarif"
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
   rector:
     name: "Checks with Rector"
@@ -532,74 +552,6 @@ jobs:
       - name: "run stylelint"
         run: "npm run stylelint"
 
-  psalm:
-    name: Psalm
-
-    permissions:
-      # Required when publishing results (badge / API / code scanning)
-      security-events: write
-      id-token: write
-      # Recommended reads for private repos to avoid GraphQL/SAST gaps
-      contents: read
-      issues: read
-      pull-requests: read
-      checks: read
-
-    runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 60
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
-
-    if: inputs.skip-psalm == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-latest"
-
-        php-version:
-          # Should use the lowest supported version
-          - "8.4"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v5"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.35.5"
-        with:
-          php-version: "${{ matrix.php-version }}"
-          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
-          ini-values: "${{ inputs.ini-values }}"
-          coverage: "none"
-          tools: "composer:v2"
-        env:
-          fail-fast: true
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          phpts: "nts"
-          debug: false
-
-      - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.1.1"
-        with:
-          dependency-versions: "lowest"
-          composer-options: "${{ inputs.composer-options }}"
-
-      - name: "Psalm"
-        run: "vendor/bin/psalm --report=results.sarif"
-
-      - name: "Upload Security Analysis results to GitHub"
-        uses: "github/codeql-action/upload-sarif@v4"
-        with:
-          sarif_file: "results.sarif"
-          token: "${{ secrets.GITHUB_TOKEN }}"
-
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
   analytics-status:
@@ -618,7 +570,6 @@ jobs:
       - "eslint"
       - "oxlint"
       - "stylelint"
-      - "psalm"
 
     steps:
       - name: Failing run
