@@ -91,7 +91,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.35.5"
+        uses: "shivammathur/setup-php@2.36.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -147,7 +147,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.35.5"
+        uses: "shivammathur/setup-php@2.36.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -207,7 +207,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.35.5"
+        uses: "shivammathur/setup-php@2.36.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -259,7 +259,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.35.5"
+        uses: "shivammathur/setup-php@2.36.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
