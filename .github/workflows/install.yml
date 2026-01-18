@@ -24,6 +24,9 @@ on:
       skip-libimagequant-install:
         required: true
         type: boolean
+      skip-libpng-install:
+        required: true
+        type: boolean
       skip-librabbitmq-install:
         required: true
         type: boolean
@@ -165,7 +168,7 @@ jobs:
 
       - name: "install libpng-dev"
         run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libimagequant-install == false
+        if: inputs.skip-libpng-install == false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
