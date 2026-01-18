@@ -44,6 +44,10 @@ on:
         required: false
         type: boolean
         default: false
+      skip-libpng-install:
+        required: false
+        type: boolean
+        default: false
       skip-librabbitmq-install:
         required: false
         type: boolean
@@ -326,7 +330,7 @@ jobs:
 
       - name: "install libpng-dev"
         run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libimagequant-install == false
+        if: inputs.skip-libpng-install == false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
@@ -388,7 +392,7 @@ jobs:
 
       - name: "install libpng-dev"
         run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libimagequant-install == false
+        if: inputs.skip-libpng-install == false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
@@ -450,7 +454,7 @@ jobs:
 
       - name: "install libpng-dev"
         run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libimagequant-install == false
+        if: inputs.skip-libpng-install == false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
@@ -512,7 +516,7 @@ jobs:
 
       - name: "install libpng-dev"
         run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libimagequant-install == false
+        if: inputs.skip-libpng-install == false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
