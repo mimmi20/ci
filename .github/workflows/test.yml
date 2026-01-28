@@ -63,6 +63,10 @@ on:
       use-phpstan:
         required: true
         type: boolean
+      skip-infection:
+        required: false
+        type: boolean
+        default: false
     secrets:
       ENV_CODECLIMATE_API_KEY:
         required: true
@@ -254,7 +258,7 @@ jobs:
 
       - name: "Run mutation tests with infection/infection without PHPStan"
         timeout-minutes: 90
-        if: inputs.use-phpstan == false
+        if: ${{ inputs.skip-infection == false && inputs.use-phpstan == false }}
         continue-on-error: true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
@@ -262,7 +266,7 @@ jobs:
 
       - name: "Run mutation tests with infection/infection with PHPStan"
         timeout-minutes: 90
-        if: inputs.use-phpstan == true
+        if: ${{ inputs.skip-infection == false && inputs.use-phpstan == true }}
         continue-on-error: true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
