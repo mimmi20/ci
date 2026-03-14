@@ -182,7 +182,7 @@ jobs:
         if: ${{ always() && steps.phpcs.outcome == 'failure' }}
         run: "cs2pr ./phpcs-report.xml"
 
-  static-code-analysis:
+  phpstan:
     name: "Static Code Analysis with PHPStan"
 
     permissions:
@@ -241,12 +241,12 @@ jobs:
 
       - name: "Run phpstan/phpstan"
         continue-on-error: ${{ inputs.use-code-scanning == true }}
-        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress --error-format=table"
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=table"
 
       - name: "Run phpstan/phpstan for Code Scanning"
         if: inputs.use-code-scanning == true
         continue-on-error: true
-        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress --error-format=sarif > phpstan-results.sarif"
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=sarif > phpstan-results.sarif"
 
       - name: "Upload Security Analysis results to GitHub"
         if: inputs.use-code-scanning == true
@@ -571,7 +571,7 @@ jobs:
     needs:
       - "php-cs-fixer"
       - "phpcs"
-      - "static-code-analysis"
+      - "phpstan"
       - "rector"
       - "prettier"
       - "eslint"
