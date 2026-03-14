@@ -181,7 +181,7 @@ jobs:
         if: ${{ always() && steps.phpcs.outcome == 'failure' }}
         run: "cs2pr ./phpcs-report.xml"
 
-  static-code-analysis:
+  phpstan:
     name: "Static Code Analysis with PHPStan"
 
     runs-on: "${{ matrix.operating-system }}"
@@ -231,7 +231,7 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=768M --no-progress"
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress"
 
   rector:
     name: "Checks with Rector"
@@ -549,7 +549,7 @@ jobs:
     needs:
       - "php-cs-fixer"
       - "phpcs"
-      - "static-code-analysis"
+      - "phpstan"
       - "rector"
       - "prettier"
       - "eslint"
