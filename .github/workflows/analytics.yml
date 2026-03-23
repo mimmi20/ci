@@ -95,7 +95,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.36.0"
+        uses: "shivammathur/setup-php@2.37.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -109,7 +109,7 @@ jobs:
           debug: false
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.1.1"
+        uses: "ramsey/composer-install@4.0.0"
         with:
           dependency-versions: "lowest"
           composer-options: "${{ inputs.composer-options }}"
@@ -151,7 +151,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.36.0"
+        uses: "shivammathur/setup-php@2.37.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -165,7 +165,7 @@ jobs:
           debug: false
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.1.1"
+        uses: "ramsey/composer-install@4.0.0"
         with:
           dependency-versions: "lowest"
           composer-options: "${{ inputs.composer-options }}"
@@ -211,7 +211,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.36.0"
+        uses: "shivammathur/setup-php@2.37.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -225,7 +225,7 @@ jobs:
           debug: false
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.1.1"
+        uses: "ramsey/composer-install@4.0.0"
         with:
           dependency-versions: "lowest"
           composer-options: "${{ inputs.composer-options }}"
@@ -263,7 +263,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.36.0"
+        uses: "shivammathur/setup-php@2.37.0"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -277,7 +277,7 @@ jobs:
           debug: false
 
       - name: "Update dependencies with composer"
-        uses: "ramsey/composer-install@3.1.1"
+        uses: "ramsey/composer-install@4.0.0"
         with:
           dependency-versions: "lowest"
           composer-options: "${{ inputs.composer-options }}"
