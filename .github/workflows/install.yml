@@ -128,7 +128,6 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "20"
           - "22"
           - "24.0"
           - "24.1"
