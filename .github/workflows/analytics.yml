@@ -328,7 +328,6 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "20"
           - "22"
           - "24"
           - "25"
@@ -390,7 +389,6 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "20"
           - "22"
           - "24"
           - "25"
@@ -452,7 +450,6 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "20"
           - "22"
           - "24"
           - "25"
@@ -514,7 +511,6 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "20"
           - "22"
           - "24"
           - "25"
