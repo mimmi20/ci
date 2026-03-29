@@ -5,14 +5,17 @@
 name: "Lock closed issue"
 
 on:
-  issues:
-    types:
-      - "closed"
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
   lock:
-    name: "Lock Issues"
-    uses: "mimmi20/ci/.github/workflows/lock-issues.yml@master"
+    name: "Lock"
+    runs-on: "ubuntu-latest"
+    permissions:
+      issues: write
+    steps:
+      - name: "Lock issue"
+        uses: "IOrlandoni/lock-issues@v1.2.1"
