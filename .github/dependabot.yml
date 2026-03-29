@@ -104,3 +104,37 @@ updates:
 
     # Disable rebasing for all pull requests
     rebase-strategy: "disabled"
+
+  - package-ecosystem: "github-actions"
+
+    directory: "/"
+
+    schedule:
+      interval: "daily"
+
+    cooldown:
+      default-days: 7
+
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+
+    assignees:
+      - "mimmi20"
+
+    labels:
+      - "dependencies"
+
+    target-branch: "8.5"
+
+    commit-message:
+      prefix: "github-actions (8.5)"
+
+    ignore:
+      - dependency-name: "mimmi20/ci"
+      - dependency-name: "release-drafter/release-drafter"
+
+    # Disable rebasing for all pull requests
+    rebase-strategy: "disabled"
