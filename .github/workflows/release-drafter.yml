@@ -24,5 +24,11 @@ permissions:
 
 jobs:
   update:
+    permissions:
+      # write permission is required to create a GitHub release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: write
     name: "Draft Release"
     uses: "mimmi20/ci/.github/workflows/draft-release.yml@master"
