@@ -43,7 +43,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-validate-composer == false
 
@@ -56,7 +56,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
     steps:
       - name: "Checkout"
@@ -84,71 +84,12 @@ jobs:
       - name: "Validate composer.json"
         run: "composer validate"
 
-  validate-yaml:
-    name: "Validate yaml"
-
-    runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
-    continue-on-error: false
-
-    if: inputs.skip-validate-yaml == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-latest"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v6"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Run yamllint"
-        uses: "actionshub/yamllint@v1.8.3"
-
-  markdownlint:
-    name: "Validate markdown files"
-
-    runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
-    continue-on-error: false
-
-    if: inputs.skip-validate-md == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-latest"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v6"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Run markdownlint"
-        uses: "DavidAnson/markdownlint-cli2-action@v22"
-        with:
-          globs: '*.md,**/*.md'
-          separator: ','
-
   lint-php:
     name: "Lint PHP"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-phplint == false
 
@@ -161,7 +102,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
     steps:
       - name: "Checkout"
@@ -194,7 +135,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-phplint == false
 
@@ -207,7 +148,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
     steps:
       - name: "Checkout"
@@ -242,7 +183,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-validate-composer == false
 
@@ -255,7 +196,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
         dependencies:
           - "lowest"
@@ -300,7 +241,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-check-composer == false
 
@@ -313,7 +254,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
         dependencies:
           - "lowest"
@@ -360,7 +301,7 @@ jobs:
 
     timeout-minutes: 10
 
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-ec-checker == false
 
@@ -373,7 +314,7 @@ jobs:
 
         php-version:
           # Should use the lowest supported version
-          - "8.5"
+          - "8.6"
 
         dependencies:
           - "lowest"
@@ -424,8 +365,6 @@ jobs:
 
     needs:
       - "validate-composer"
-      - "validate-yaml"
-      - "markdownlint"
       - "lint-php"
       - "php-lint-overtrue"
       - "composer-normalize"

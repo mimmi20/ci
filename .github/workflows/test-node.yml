@@ -1,0 +1,296 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      extensions:
+        required: true
+        type: string
+      ini-values:
+        required: true
+        type: string
+      coverage:
+        required: true
+        type: string
+      composer-options:
+        required: true
+        type: string
+      test-name:
+        required: true
+        type: string
+      min-msi:
+        required: true
+        type: number
+      min-covered-msi:
+        required: true
+        type: number
+      skip-phpunit:
+        required: true
+        type: boolean
+      skip-vitest:
+        required: true
+        type: boolean
+      skip-stryker:
+        required: true
+        type: boolean
+      upload-codecov:
+        required: true
+        type: boolean
+      upload-codeclimate:
+        required: true
+        type: boolean
+      upload-coveralls:
+        required: true
+        type: boolean
+      upload-flag:
+        required: true
+        type: string
+      skip-nasm-install:
+        required: true
+        type: boolean
+      skip-libimagequant-install:
+        required: true
+        type: boolean
+      skip-libpng-install:
+        required: true
+        type: boolean
+      skip-librabbitmq-install:
+        required: true
+        type: boolean
+      skip-libgif-install:
+        required: true
+        type: boolean
+      use-phpstan:
+        required: true
+        type: boolean
+      skip-infection:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      ENV_CODECLIMATE_API_KEY:
+        required: true
+      ENV_CODECOV_TOKEN:
+        required: true
+      ENV_STRYKER_DASHBOARD_API_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  vitest:
+    name: "UnitTests with vitest"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    if: inputs.skip-vitest == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libpng-install == false
+
+      - name: "install librabbitmq-dev"
+        run: "sudo apt-get install librabbitmq-dev -y"
+        if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "Run tests and generate coverage report${{ inputs.test-name }}"
+        run: "npm run coverage"
+
+      - name: "Upload coverage report to Codecov"
+        uses: "codecov/codecov-action@v5.5.2"
+        if: inputs.upload-codecov == true
+        with:
+          files: ".reports/clover.xml"
+          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+          disable_search: true
+          disable_file_fixes: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
+      - name: "Upload test results to Codecov"
+        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+        continue-on-error: true
+        uses: "codecov/test-results-action@v1"
+        with:
+          files: "./junit-report.xml"
+          flags: "vitest,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+          disable_search: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
+      - name: "Upload coverage to Codeclimate"
+        uses: "paambaati/codeclimate-action@v9.0.0"
+        if: inputs.upload-codeclimate == true
+        continue-on-error: true
+        env:
+          CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
+        with:
+          coverageLocations: ".reports/clover.xml:clover"
+          debug: false
+
+      - name: "Upload coverage to Coveralls"
+        uses: "coverallsapp/github-action@v2"
+        if: inputs.upload-coveralls == true
+        continue-on-error: true
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          flag-name: "nodeJS ${{ matrix.node-version }} on ${{ matrix.operating-system }}"
+          parallel: true
+          file: ".reports/clover.xml"
+          format: "clover"
+          debug: false
+
+  stryker:
+    name: "UnitTests with stryker"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    if: inputs.skip-stryker == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install --frozen-lockfile"
+
+      - name: "Run tests and generate coverage report${{ inputs.test-name }}"
+        run: "npm run coverage"
+
+      - name: "Upload coverage report to Codecov"
+        uses: "codecov/codecov-action@v5.5.2"
+        if: inputs.upload-codecov == true
+        continue-on-error: true
+        with:
+          files: ".reports/clover.xml"
+          flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+          verbose: false
+          disable_search: true
+          disable_file_fixes: true
+        env:
+          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
+#      - name: "Upload test results to Codecov"
+#        if: ${{ inputs.upload-codecov == true && !cancelled() }}
+#        uses: "codecov/test-results-action@v1"
+#        with:
+#          files: ".reports/junit.xml"
+#          flags: "stryker,nodejs-${{ matrix.node-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
+#          verbose: false
+#          disable_search: true
+#        env:
+#          CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
+
+      - name: "Upload coverage to Codeclimate"
+        uses: "paambaati/codeclimate-action@v9.0.0"
+        if: inputs.upload-codeclimate == true
+        continue-on-error: true
+        env:
+          CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
+        with:
+          coverageLocations: ".reports/clover.xml:clover"
+          debug: false
+
+      - name: "Upload coverage to Coveralls"
+        uses: "coverallsapp/github-action@v2"
+        if: inputs.upload-coveralls == true
+        continue-on-error: true
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          flag-name: "nodeJS ${{ matrix.node-version }} on ${{ matrix.operating-system }}"
+          parallel: true
+          file: ".reports/clover.xml"
+          format: "clover"
+          debug: false
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  tests-status:
+    name: "Unit & Integration Tests Status"
+
+    runs-on: "ubuntu-latest"
+
+    if: always()
+
+    needs:
+      - "vitest"
+      - "stryker"
+
+    steps:
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
