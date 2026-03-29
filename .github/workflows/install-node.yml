@@ -1,8 +1,23 @@
-name: "Lint GitHub Actions workflows"
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
 
 on:
   workflow_call:
     inputs:
+      extensions:
+        required: true
+        type: string
+      ini-values:
+        required: true
+        type: string
+      composer-options:
+        required: true
+        type: string
+      skip-php-install:
+        required: true
+        type: boolean
+      skip-npm-install:
+        required: true
+        type: boolean
       skip-nasm-install:
         required: true
         type: boolean
@@ -23,11 +38,13 @@ permissions:
   contents: read
 
 jobs:
-  actionlint:
+  install-npm:
     name: "Install Node dependencies"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
+
+    if: inputs.skip-npm-install == false
 
     strategy:
       fail-fast: false
@@ -37,7 +54,31 @@ jobs:
           - "ubuntu-latest"
 
         node-version:
-          - "24"
+          - "22"
+          - "24.0"
+          - "24.1"
+          - "24.2"
+          - "24.3"
+          - "24.4"
+          - "24.5"
+          - "24.6"
+          - "24.7"
+          - "24.8"
+          - "24.9"
+          - "24.10"
+          - "24.11"
+          - "24.12"
+          - "24.13"
+          - "24.14"
+          - "25.0"
+          - "25.1"
+          - "25.2"
+          - "25.3"
+          - "25.4"
+          - "25.5"
+          - "25.6"
+          - "25.7"
+          - "25.8"
 
     steps:
       - name: "Checkout"
@@ -73,24 +114,25 @@ jobs:
         with:
           node-version: "${{ matrix.node-version }}"
 
-      - name: "Check workflow files"
-        id: "actionlint"
-        uses: "raven-actions/actionlint@v2"
-        with:
-          matcher: true
-          cache: true
-          fail-on-error: false
-          flags: "-ignore SC2086"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: "install dependencies"
+        run: "npm install"
 
-      - name: "Summary"
-        if: ${{ steps.actionlint.outputs.exit-code != 0 }}  # example usage, do echo only when actionlint action failed
-        run: |
-          echo "Used actionlint version ${{ steps.actionlint.outputs.version-semver }}"
-          echo "Used actionlint release ${{ steps.actionlint.outputs.version-tag }}"
-          echo "actionlint ended with ${{ steps.actionlint.outputs.exit-code }} exit code"
-          echo "actionlint ended because '${{ steps.actionlint.outputs.exit-message }}'"
-          echo "actionlint found ${{ steps.actionlint.outputs.total-errors }} errors"
-          echo "actionlint checked ${{ steps.actionlint.outputs.total-files }} files"
-          echo "actionlint cache used: ${{ steps.actionlint.outputs.cache-hit }}"
-          exit 1
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  install-status:
+    name: "Install Status"
+
+    runs-on: "ubuntu-latest"
+
+    if: always()
+
+    needs: "install-npm"
+
+    steps:
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0

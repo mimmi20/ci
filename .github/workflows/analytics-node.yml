@@ -1,0 +1,335 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      extensions:
+        required: true
+        type: string
+      ini-values:
+        required: true
+        type: string
+      composer-options:
+        required: true
+        type: string
+      skip-php-cs-fixer:
+        required: true
+        type: boolean
+      skip-phpcs:
+        required: true
+        type: boolean
+      skip-phpstan:
+        required: true
+        type: boolean
+      skip-rector:
+        required: true
+        type: boolean
+      phpcs-options:
+        required: true
+        type: string
+      skip-eslint:
+        required: true
+        type: boolean
+      skip-stylelint:
+        required: true
+        type: boolean
+      skip-prettier:
+        required: true
+        type: boolean
+      skip-nasm-install:
+        required: true
+        type: boolean
+      skip-libimagequant-install:
+        required: true
+        type: boolean
+      skip-libpng-install:
+        required: true
+        type: boolean
+      skip-librabbitmq-install:
+        required: true
+        type: boolean
+      skip-libgif-install:
+        required: true
+        type: boolean
+      skip-oxlint:
+        required: true
+        type: boolean
+      use-code-scanning:
+        required: true
+        type: boolean
+
+permissions:
+  contents: read
+  security-events: read
+  issues: read
+  pull-requests: read
+  checks: read
+
+jobs:
+  prettier:
+    name: "Run prettier"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+
+    if: inputs.skip-prettier == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libpng-install == false
+
+      - name: "install librabbitmq-dev"
+        run: "sudo apt-get install librabbitmq-dev -y"
+        if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run prettier"
+        run: "npm run prettier"
+
+  eslint:
+    name: "Run eslint"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+
+    if: inputs.skip-eslint == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libpng-install == false
+
+      - name: "install librabbitmq-dev"
+        run: "sudo apt-get install librabbitmq-dev -y"
+        if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run eslint"
+        run: "npm run eslint"
+
+  oxlint:
+    name: "Run oxlint"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+
+    if: inputs.skip-oxlint == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libpng-install == false
+
+      - name: "install librabbitmq-dev"
+        run: "sudo apt-get install librabbitmq-dev -y"
+        if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run oxlint"
+        run: "npm run oxlint"
+
+  stylelint:
+    name: "Run stylelint"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    # continue-on-error: ${{ '8.4' == matrix.php-version }}
+
+    if: inputs.skip-stylelint == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        node-version:
+          - "22"
+          - "24"
+          - "25"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Set up NASM (for imagemin binary builds)"
+        uses: "ilammy/setup-nasm@v1"
+        if: inputs.skip-nasm-install == false
+
+      - name: "install libimagequant-dev"
+        run: "sudo apt-get install libimagequant-dev -y"
+        if: inputs.skip-libimagequant-install == false
+
+      - name: "install libpng-dev"
+        run: "sudo apt-get install libpng-dev -y"
+        if: inputs.skip-libpng-install == false
+
+      - name: "install librabbitmq-dev"
+        run: "sudo apt-get install librabbitmq-dev -y"
+        if: inputs.skip-librabbitmq-install == false
+
+      - name: "install libgif-dev"
+        run: "sudo apt-get install libgif-dev"
+        if: inputs.skip-libgif-install == false
+
+      - name: "Use Node.js ${{ matrix.node-version }}"
+        uses: "actions/setup-node@v6"
+        with:
+          node-version: "${{ matrix.node-version }}"
+
+      - name: "install dependencies"
+        run: "npm install"
+
+      - name: "run stylelint"
+        run: "npm run stylelint"
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  analytics-status:
+    name: "Status Analytics"
+
+    runs-on: "ubuntu-latest"
+
+    if: always()
+
+    needs:
+      - "prettier"
+      - "eslint"
+      - "oxlint"
+      - "stylelint"
+
+    steps:
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
