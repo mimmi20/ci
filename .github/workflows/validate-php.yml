@@ -218,7 +218,7 @@ jobs:
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
           # @todo: change version, if error in installation is solved
-          tools: "composer:v2, composer-normalize:2.47.0"
+          tools: "composer:v2"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -232,7 +232,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Check composer.json"
-        run: "composer-normalize --dry-run --indent-size=2 --indent-style=space"
+        run: "composer normalize --dry-run --indent-size=2 --indent-style=space"
 
   composer-dependency-analyser:
     name: "Check composer dependencies with composer-dependency-analyser"
