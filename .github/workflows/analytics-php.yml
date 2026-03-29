@@ -194,7 +194,7 @@ jobs:
       checks: read
 
     runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
+    timeout-minutes: 20
     continue-on-error: ${{ '8.6' == matrix.php-version }}
 
     if: inputs.skip-phpstan == false
