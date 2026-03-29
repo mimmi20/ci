@@ -1,0 +1,336 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+on:
+  workflow_call:
+    inputs:
+      extensions:
+        required: true
+        type: string
+      ini-values:
+        required: true
+        type: string
+      composer-options:
+        required: true
+        type: string
+      skip-php-cs-fixer:
+        required: true
+        type: boolean
+      skip-phpcs:
+        required: true
+        type: boolean
+      skip-phpstan:
+        required: true
+        type: boolean
+      skip-rector:
+        required: true
+        type: boolean
+      phpcs-options:
+        required: true
+        type: string
+      skip-eslint:
+        required: true
+        type: boolean
+      skip-stylelint:
+        required: true
+        type: boolean
+      skip-prettier:
+        required: true
+        type: boolean
+      skip-nasm-install:
+        required: true
+        type: boolean
+      skip-libimagequant-install:
+        required: true
+        type: boolean
+      skip-libpng-install:
+        required: true
+        type: boolean
+      skip-librabbitmq-install:
+        required: true
+        type: boolean
+      skip-libgif-install:
+        required: true
+        type: boolean
+      skip-oxlint:
+        required: true
+        type: boolean
+      use-code-scanning:
+        required: true
+        type: boolean
+
+permissions:
+  contents: read
+  security-events: read
+  issues: read
+  pull-requests: read
+  checks: read
+
+jobs:
+  php-cs-fixer:
+    name: "Check Coding Standards with PHP-CS-Fixer"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+
+    if: inputs.skip-php-cs-fixer == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.5"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.37.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, cs2pr"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: false
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@4.0.0"
+        with:
+          dependency-versions: "lowest"
+          composer-options: "${{ inputs.composer-options }}"
+
+      - name: "Run friendsofphp/php-cs-fixer"
+        run: "vendor/bin/php-cs-fixer fix --dry-run -vv --diff --show-progress=dots"
+        continue-on-error: true
+
+      - name: "Run friendsofphp/php-cs-fixer"
+        run: "vendor/bin/php-cs-fixer fix --dry-run --show-progress=none --format=checkstyle | cs2pr"
+
+  phpcs:
+    name: "Check Coding Standards with PHPCS"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 30
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+
+    if: inputs.skip-phpcs == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.5"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.37.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2, cs2pr"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: false
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@4.0.0"
+        with:
+          dependency-versions: "lowest"
+          composer-options: "${{ inputs.composer-options }}"
+
+      - name: "Enable annotations for validation errors and warnings"
+        uses: "korelstar/xmllint-problem-matcher@v1"
+
+      - name: "Run squizlabs/php_codesniffer"
+        id: "phpcs"
+        run: "vendor/bin/phpcs --report-full --report-performance --report-checkstyle=./phpcs-report.xml -v ${{ inputs.phpcs-options }}"
+
+      - name: "Show PHPCS results in PR"
+        if: ${{ always() && steps.phpcs.outcome == 'failure' }}
+        run: "cs2pr ./phpcs-report.xml"
+
+  phpstan:
+    name: "Static Code Analysis with PHPStan"
+
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      issues: read
+      pull-requests: read
+      checks: read
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+
+    if: inputs.skip-phpstan == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.5"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.37.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: false
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@4.0.0"
+        with:
+          dependency-versions: "lowest"
+          composer-options: "${{ inputs.composer-options }}"
+
+      - name: "Run phpstan/phpstan"
+        continue-on-error: ${{ inputs.use-code-scanning == true }}
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=table"
+
+      - name: "Run phpstan/phpstan for Code Scanning"
+        if: inputs.use-code-scanning == true
+        continue-on-error: true
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=sarif > phpstan-results.sarif"
+
+      - name: "Upload Security Analysis results to GitHub"
+        if: inputs.use-code-scanning == true
+        uses: "github/codeql-action/upload-sarif@v4"
+        with:
+          sarif_file: "phpstan-results.sarif"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+
+  rector:
+    name: "Checks with Rector"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+
+    if: inputs.skip-rector == false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-latest"
+
+        php-version:
+          # Should use the lowest supported version
+          - "8.5"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.37.0"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
+          ini-values: "${{ inputs.ini-values }}"
+          coverage: "none"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          phpts: "nts"
+          debug: false
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@4.0.0"
+        with:
+          dependency-versions: "lowest"
+          composer-options: "${{ inputs.composer-options }}"
+
+      - name: "Run checks with rector/rector"
+        run: "vendor/bin/rector process --ansi --dry-run --debug"
+        continue-on-error: true
+
+      - name: "Run checks with rector/rector"
+        run: "vendor/bin/rector process --ansi --dry-run --debug --no-diffs"
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  analytics-status:
+    name: "Status Analytics"
+
+    runs-on: "ubuntu-latest"
+
+    if: always()
+
+    needs:
+      - "php-cs-fixer"
+      - "phpcs"
+      - "phpstan"
+      - "rector"
+
+    steps:
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
