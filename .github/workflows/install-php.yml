@@ -118,85 +118,6 @@ jobs:
         if: ${{ '8.5' > matrix.php-version }}
         run: "composer outdated --direct"
 
-  install-npm:
-    name: "Install Node dependencies"
-
-    runs-on: "${{ matrix.operating-system }}"
-    timeout-minutes: 10
-
-    if: inputs.skip-npm-install == false
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        operating-system:
-          - "ubuntu-latest"
-
-        node-version:
-          - "22"
-          - "24.0"
-          - "24.1"
-          - "24.2"
-          - "24.3"
-          - "24.4"
-          - "24.5"
-          - "24.6"
-          - "24.7"
-          - "24.8"
-          - "24.9"
-          - "24.10"
-          - "24.11"
-          - "24.12"
-          - "24.13"
-          - "24.14"
-          - "25.0"
-          - "25.1"
-          - "25.2"
-          - "25.3"
-          - "25.4"
-          - "25.5"
-          - "25.6"
-          - "25.7"
-          - "25.8"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v6"
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-          lfs: false
-          persist-credentials: false
-
-      - name: "Set up NASM (for imagemin binary builds)"
-        uses: "ilammy/setup-nasm@v1"
-        if: inputs.skip-nasm-install == false
-
-      - name: "install libimagequant-dev"
-        run: "sudo apt-get install libimagequant-dev -y"
-        if: inputs.skip-libimagequant-install == false
-
-      - name: "install libpng-dev"
-        run: "sudo apt-get install libpng-dev -y"
-        if: inputs.skip-libpng-install == false
-
-      - name: "install librabbitmq-dev"
-        run: "sudo apt-get install librabbitmq-dev -y"
-        if: inputs.skip-librabbitmq-install == false
-
-      - name: "install libgif-dev"
-        run: "sudo apt-get install libgif-dev"
-        if: inputs.skip-libgif-install == false
-
-      - name: "Use Node.js ${{ matrix.node-version }}"
-        uses: "actions/setup-node@v6"
-        with:
-          node-version: "${{ matrix.node-version }}"
-
-      - name: "install dependencies"
-        run: "npm install"
-
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
   install-status:
@@ -206,9 +127,7 @@ jobs:
 
     if: always()
 
-    needs:
-      - "install-php"
-      - "install-npm"
+    needs: "install-php"
 
     steps:
       - name: Failing run
