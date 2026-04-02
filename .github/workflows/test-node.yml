@@ -116,7 +116,7 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v5.5.2"
+        uses: "codecov/codecov-action@v6.0.0"
         if: inputs.upload-codecov == true
         with:
           files: ".reports/clover.xml"
@@ -203,7 +203,7 @@ jobs:
         run: "npm run coverage"
 
       - name: "Upload coverage report to Codecov"
-        uses: "codecov/codecov-action@v5.5.2"
+        uses: "codecov/codecov-action@v6.0.0"
         if: inputs.upload-codecov == true
         continue-on-error: true
         with:
