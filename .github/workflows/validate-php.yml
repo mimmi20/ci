@@ -15,12 +15,6 @@ on:
       skip-validate-composer:
         required: true
         type: boolean
-      skip-validate-yaml:
-        required: true
-        type: boolean
-      skip-validate-md:
-        required: true
-        type: boolean
       skip-phplint:
         required: true
         type: boolean
@@ -373,9 +367,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0

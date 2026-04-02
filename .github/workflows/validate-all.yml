@@ -3,36 +3,12 @@
 on:
   workflow_call:
     inputs:
-      extensions:
-        required: true
-        type: string
-      ini-values:
-        required: true
-        type: string
-      composer-options:
-        required: true
-        type: string
-      skip-validate-composer:
-        required: true
-        type: boolean
       skip-validate-yaml:
         required: true
         type: boolean
       skip-validate-md:
         required: true
         type: boolean
-      skip-phplint:
-        required: true
-        type: boolean
-      skip-check-composer:
-        required: true
-        type: boolean
-      skip-ec-checker:
-        required: true
-        type: boolean
-      dependency-analyser-options:
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -112,9 +88,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0

@@ -3,30 +3,12 @@
 on:
   workflow_call:
     inputs:
-      extensions:
-        required: true
-        type: string
-      ini-values:
-        required: true
-        type: string
       coverage:
-        required: true
-        type: string
-      composer-options:
         required: true
         type: string
       test-name:
         required: true
         type: string
-      min-msi:
-        required: true
-        type: number
-      min-covered-msi:
-        required: true
-        type: number
-      skip-phpunit:
-        required: true
-        type: boolean
       skip-vitest:
         required: true
         type: boolean
@@ -60,13 +42,6 @@ on:
       skip-libgif-install:
         required: true
         type: boolean
-      use-phpstan:
-        required: true
-        type: boolean
-      skip-infection:
-        required: false
-        type: boolean
-        default: false
     secrets:
       ENV_CODECLIMATE_API_KEY:
         required: true
@@ -288,9 +263,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0
