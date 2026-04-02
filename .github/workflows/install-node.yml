@@ -3,21 +3,6 @@
 on:
   workflow_call:
     inputs:
-      extensions:
-        required: true
-        type: string
-      ini-values:
-        required: true
-        type: string
-      composer-options:
-        required: true
-        type: string
-      skip-php-install:
-        required: true
-        type: boolean
-      skip-npm-install:
-        required: true
-        type: boolean
       skip-nasm-install:
         required: true
         type: boolean
@@ -43,8 +28,6 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-
-    if: inputs.skip-npm-install == false
 
     strategy:
       fail-fast: false
@@ -130,9 +113,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0

@@ -3,30 +3,6 @@
 on:
   workflow_call:
     inputs:
-      extensions:
-        required: true
-        type: string
-      ini-values:
-        required: true
-        type: string
-      composer-options:
-        required: true
-        type: string
-      skip-php-cs-fixer:
-        required: true
-        type: boolean
-      skip-phpcs:
-        required: true
-        type: boolean
-      skip-phpstan:
-        required: true
-        type: boolean
-      skip-rector:
-        required: true
-        type: boolean
-      phpcs-options:
-        required: true
-        type: string
       skip-eslint:
         required: true
         type: boolean
@@ -52,9 +28,6 @@ on:
         required: true
         type: boolean
       skip-oxlint:
-        required: true
-        type: boolean
-      use-code-scanning:
         required: true
         type: boolean
 
@@ -327,9 +300,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0
