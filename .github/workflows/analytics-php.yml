@@ -37,32 +37,33 @@ on:
         required: true
         type: boolean
       skip-nasm-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libimagequant-install:
-        required: false
+        required: true
         type: boolean
-        default: false
       skip-libpng-install:
-        required: false
+        required: true
         type: boolean
-        default: false
       skip-librabbitmq-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libgif-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-oxlint:
-        required: false
+        required: true
         type: boolean
-        default: true
+      use-code-scanning:
+        required: true
+        type: boolean
 
 permissions:
   contents: read
+  security-events: read
+  issues: read
+  pull-requests: read
+  checks: read
 
 jobs:
   php-cs-fixer:
@@ -184,6 +185,14 @@ jobs:
   phpstan:
     name: "Static Code Analysis with PHPStan"
 
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      issues: read
+      pull-requests: read
+      checks: read
+
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 20
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
@@ -231,7 +240,20 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress"
+        continue-on-error: ${{ inputs.use-code-scanning == true }}
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=table"
+
+      - name: "Run phpstan/phpstan for Code Scanning"
+        if: inputs.use-code-scanning == true
+        continue-on-error: true
+        run: "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1024M --no-progress --error-format=sarif > phpstan-results.sarif"
+
+      - name: "Upload Security Analysis results to GitHub"
+        if: inputs.use-code-scanning == true
+        uses: "github/codeql-action/upload-sarif@v4"
+        with:
+          sarif_file: "phpstan-results.sarif"
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
   rector:
     name: "Checks with Rector"

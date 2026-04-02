@@ -4,9 +4,8 @@ on:
   workflow_call:
     inputs:
       extensions:
-        required: false
+        required: true
         type: string
-        default: ""
       ini-values:
         required: true
         type: string
@@ -47,26 +46,24 @@ on:
         required: true
         type: string
       skip-nasm-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libimagequant-install:
-        required: false
+        required: true
         type: boolean
-        default: false
       skip-libpng-install:
-        required: false
+        required: true
         type: boolean
-        default: false
       skip-librabbitmq-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       skip-libgif-install:
-        required: false
+        required: true
         type: boolean
-        default: true
       use-phpstan:
+        required: true
+        type: boolean
+      skip-infection:
         required: false
         type: boolean
         default: false
@@ -87,7 +84,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
 
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
@@ -151,7 +148,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
 
-    timeout-minutes: 30
+    timeout-minutes: 120
 
     continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
 
@@ -260,14 +257,16 @@ jobs:
           debug: false
 
       - name: "Run mutation tests with infection/infection without PHPStan"
-        if: inputs.use-phpstan == false
+        timeout-minutes: 90
+        if: ${{ inputs.skip-infection == false && inputs.use-phpstan == false }}
         continue-on-error: true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
         run: "vendor/bin/infection --show-mutations --min-covered-msi=${{ inputs.min-covered-msi }} --min-msi=${{ inputs.min-msi }} --coverage=.build/coverage --logger-github --no-progress --show-mutations=max -vv"
 
       - name: "Run mutation tests with infection/infection with PHPStan"
-        if: inputs.use-phpstan == true
+        timeout-minutes: 90
+        if: ${{ inputs.skip-infection == false && inputs.use-phpstan == true }}
         continue-on-error: true
         env:
           STRYKER_DASHBOARD_API_KEY: "${{ secrets.ENV_STRYKER_DASHBOARD_API_KEY }}"
