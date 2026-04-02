@@ -12,7 +12,7 @@
 name: "Dependency Review"
 
 on:
-  - pull_request
+  workflow_call:
 
 permissions:
   contents: read
@@ -20,26 +20,21 @@ permissions:
 
 jobs:
   dependency-review:
-    name: "Review"
-    uses: "mimmi20/ci/.github/workflows/review-dependency.yml@8.3"
-
-  # This is a meta job to avoid to have to constantly change the protection rules
-  # whenever we touch the matrix.
-  review-status:
-    name: "Review Status"
-
     runs-on: "ubuntu-latest"
 
-    if: always()
-
-    needs:
-      - "dependency-review"
-
     steps:
-      - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
-        run: exit 1
+      - name: "Checkout"
+        uses: "actions/checkout@v6"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
 
-      - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
-        run: exit 0
+      - name: "Dependency Review"
+        uses: "actions/dependency-review-action@v4.9.0"
+        with:
+          "license-check": true
+          "vulnerability-check": true
+          "comment-summary-in-pr": always
+          "show-patched-versions": true
