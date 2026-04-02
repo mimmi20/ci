@@ -24,15 +24,6 @@ on:
       min-covered-msi:
         required: true
         type: number
-      skip-phpunit:
-        required: true
-        type: boolean
-      skip-vitest:
-        required: true
-        type: boolean
-      skip-stryker:
-        required: true
-        type: boolean
       upload-codecov:
         required: true
         type: boolean
@@ -45,15 +36,6 @@ on:
       upload-flag:
         required: true
         type: string
-      skip-nasm-install:
-        required: true
-        type: boolean
-      skip-libimagequant-install:
-        required: true
-        type: boolean
-      skip-libpng-install:
-        required: true
-        type: boolean
       skip-librabbitmq-install:
         required: true
         type: boolean
@@ -87,8 +69,6 @@ jobs:
     timeout-minutes: 40
 
     continue-on-error: ${{ '8.6' == matrix.php-version }}
-
-    if: inputs.skip-phpunit == false
 
     strategy:
       fail-fast: false
@@ -151,8 +131,6 @@ jobs:
     timeout-minutes: 120
 
     continue-on-error: ${{ '8.6' == matrix.php-version }}
-
-    if: inputs.skip-phpunit == false
 
     strategy:
       fail-fast: false
@@ -301,9 +279,9 @@ jobs:
 
     steps:
       - name: Failing run
-        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled') }}
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1
 
       - name: Successful run
-        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'skipped')) && !(contains(needs.*.result, 'cancelled')) }}
+        if: ${{ !(contains(needs.*.result, 'failure')) && !(contains(needs.*.result, 'cancelled')) }}
         run: exit 0
