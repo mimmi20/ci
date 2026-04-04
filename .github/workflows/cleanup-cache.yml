@@ -28,19 +28,18 @@ jobs:
 
       - name: "Cleanup"
         run: |
-          REPO=${{ inputs.repository }}
-          REF=${{ inputs.ref }}
-
           echo "Fetching list of cache key"
-          gh cache list --repo $REPO --ref $REF
+          gh cache list --repo "$INPUT_REPOSITORY" --ref "$INPUT_REF"
 
           ## Setting this to not fail the workflow while deleting cache keys.
           set +e
           echo "Deleting caches..."
-          gh cache delete --all --repo $REPO --ref $REF
+          gh cache delete --all --repo "$INPUT_REPOSITORY" --ref "$INPUT_REF"
           echo "Done"
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          INPUT_REPOSITORY: "${{ inputs.repository }}"
+          INPUT_REF: "${{ inputs.ref }}"
 
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
