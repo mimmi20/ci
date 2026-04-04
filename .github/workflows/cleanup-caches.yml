@@ -15,7 +15,7 @@ permissions:
 jobs:
   cleanup:
     name: "Cleanup Caches"
-    uses: "mimmi20/ci/.github/workflows/cleanup-cache.yml@master"
+    uses: "mimmi20/ci/.github/workflows/cleanup-cache.yml@8.5"
     permissions:
       actions: write
     with:
