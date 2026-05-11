@@ -59,6 +59,7 @@ jobs:
           - "22"
           - "24"
           - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
@@ -120,6 +121,7 @@ jobs:
           - "22"
           - "24"
           - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
@@ -181,6 +183,7 @@ jobs:
           - "22"
           - "24"
           - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
@@ -242,6 +245,7 @@ jobs:
           - "22"
           - "24"
           - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
