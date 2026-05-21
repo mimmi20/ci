@@ -101,7 +101,7 @@ jobs:
         if: inputs.skip-libgif-install == false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.37.0"
+        uses: "shivammathur/setup-php@2.37.1"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
@@ -163,7 +163,7 @@ jobs:
         if: inputs.skip-libgif-install == false
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.37.0"
+        uses: "shivammathur/setup-php@2.37.1"
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
