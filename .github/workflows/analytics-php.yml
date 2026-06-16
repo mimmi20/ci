@@ -145,7 +145,7 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Enable annotations for validation errors and warnings"
-        uses: "korelstar/xmllint-problem-matcher@v1.2.0"
+        uses: "korelstar/xmllint-problem-matcher@v1.3.0"
 
       - name: "Run squizlabs/php_codesniffer"
         id: "phpcs"
