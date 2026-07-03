@@ -75,7 +75,7 @@ jobs:
 
       - name: "Check workflow files"
         id: "actionlint"
-        uses: "raven-actions/actionlint@v2.1.2"
+        uses: "raven-actions/actionlint@v2.2.0"
         with:
           matcher: true
           cache: true
