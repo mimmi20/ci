@@ -73,7 +73,7 @@ jobs:
         node-version:
           - "22"
           - "24"
-          - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
@@ -83,6 +83,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Set up NASM (for imagemin binary builds)"
         uses: "ilammy/setup-nasm@v1"
@@ -180,7 +181,7 @@ jobs:
         node-version:
           - "22"
           - "24"
-          - "25"
+          - "26"
 
     steps:
       - name: "Checkout"
@@ -190,6 +191,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: "actions/setup-node@v6.4.0"

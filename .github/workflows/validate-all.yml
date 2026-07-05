@@ -38,6 +38,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Run yamllint"
         uses: "actionshub/yamllint@v1.8.3"
@@ -66,6 +67,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Run markdownlint"
         uses: "DavidAnson/markdownlint-cli2-action@v23.2.0"

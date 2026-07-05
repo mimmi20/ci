@@ -52,6 +52,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "install librabbitmq-dev"
         run: "sudo apt-get install librabbitmq-dev -y"
