@@ -60,6 +60,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
@@ -106,6 +107,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
@@ -152,6 +154,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
@@ -203,6 +206,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
@@ -261,6 +265,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
@@ -321,6 +326,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@2.37.2"
