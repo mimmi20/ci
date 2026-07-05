@@ -30,6 +30,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Dependency Review"
         uses: "actions/dependency-review-action@v5.0.0"

@@ -47,6 +47,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Set up NASM (for imagemin binary builds)"
         uses: "ilammy/setup-nasm@v1"
