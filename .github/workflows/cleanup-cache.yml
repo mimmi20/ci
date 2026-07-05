@@ -29,6 +29,7 @@ jobs:
           fetch-depth: 0
           lfs: false
           persist-credentials: false
+          submodules: false
 
       - name: "Cleanup"
         run: |
