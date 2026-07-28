@@ -225,7 +225,7 @@ jobs:
           debug: false
 
       - name: "Upload coverage to Coveralls"
-        uses: "coverallsapp/github-action@v2"
+        uses: "coverallsapp/github-action@v2.3.6"
         if: inputs.upload-coveralls == true
         continue-on-error: true
         with:
@@ -261,7 +261,7 @@ jobs:
 
     steps:
       - name: "Coveralls Finished"
-        uses: "coverallsapp/github-action@v2"
+        uses: "coverallsapp/github-action@v2.3.6"
         continue-on-error: true
         with:
           parallel-finished: true
