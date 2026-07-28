@@ -151,7 +151,7 @@ jobs:
           debug: false
 
       - name: "Upload coverage to Coveralls"
-        uses: "coverallsapp/github-action@v2"
+        uses: "coverallsapp/github-action@v2.3.6"
         if: inputs.upload-coveralls == true
         continue-on-error: true
         with:
@@ -239,7 +239,7 @@ jobs:
           debug: false
 
       - name: "Upload coverage to Coveralls"
-        uses: "coverallsapp/github-action@v2"
+        uses: "coverallsapp/github-action@v2.3.6"
         if: inputs.upload-coveralls == true
         continue-on-error: true
         with:
