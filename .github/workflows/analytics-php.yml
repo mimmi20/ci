@@ -40,7 +40,7 @@ permissions:
 
 jobs:
   php-cs-fixer:
-    name: "Check Coding Standards with PHP-CS-Fixer"
+    name: "Check Coding Standards with PHP-CS-Fixer on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -97,7 +97,7 @@ jobs:
         run: "vendor/bin/php-cs-fixer fix --dry-run --show-progress=none --format=checkstyle | cs2pr"
 
   phpcs:
-    name: "Check Coding Standards with PHPCS"
+    name: "Check Coding Standards with PHPCS on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 30
@@ -158,7 +158,7 @@ jobs:
         run: "cs2pr ./phpcs-report.xml"
 
   phpstan:
-    name: "Static Code Analysis with PHPStan"
+    name: "Static Code Analysis with PHPStan on PHP ${{ matrix.php-version }}"
 
     permissions:
       security-events: write
@@ -232,7 +232,7 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
 
   rector:
-    name: "Checks with Rector"
+    name: "Checks with Rector on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10

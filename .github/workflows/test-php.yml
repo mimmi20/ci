@@ -62,7 +62,7 @@ permissions:
 
 jobs:
   phpunit:
-    name: "UnitTests with PHPUnit"
+    name: "UnitTests with PHPUnit on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
 
@@ -125,7 +125,7 @@ jobs:
         run: "vendor/bin/phpunit -c phpunit.xml --no-coverage --display-warnings --display-deprecations"
 
   phpunit-code-coverage:
-    name: "Code Coverage with PHPUnit"
+    name: "Code Coverage with PHPUnit on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
 
