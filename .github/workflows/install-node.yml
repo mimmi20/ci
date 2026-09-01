@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   install-npm:
-    name: "Install Node dependencies"
+    name: "Install dependencies on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -57,11 +57,17 @@ jobs:
           - "24.16"
           - "24.17"
           - "24.18"
+          - "24.19"
+          - "24.20"
           - "26.0"
           - "26.1"
           - "26.2"
           - "26.3"
           - "26.4"
+          - "26.5"
+          - "26.6"
+          - "26.7"
+          - "26.8"
 
     steps:
       - name: "Checkout"

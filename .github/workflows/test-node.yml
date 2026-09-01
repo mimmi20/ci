@@ -55,7 +55,7 @@ permissions:
 
 jobs:
   vitest:
-    name: "UnitTests with vitest"
+    name: "UnitTests with vitest on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -163,7 +163,7 @@ jobs:
           debug: false
 
   stryker:
-    name: "UnitTests with stryker"
+    name: "UnitTests with stryker on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
