@@ -40,7 +40,7 @@ permissions:
 
 jobs:
   prettier:
-    name: "Run prettier"
+    name: "Run prettier on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -102,7 +102,7 @@ jobs:
         run: "npm run prettier"
 
   eslint:
-    name: "Run eslint"
+    name: "Run eslint on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -164,7 +164,7 @@ jobs:
         run: "npm run eslint"
 
   oxlint:
-    name: "Run oxlint"
+    name: "Run oxlint on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -226,7 +226,7 @@ jobs:
         run: "npm run oxlint"
 
   stylelint:
-    name: "Run stylelint"
+    name: "Run stylelint on nodejs ${{ matrix.node-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10

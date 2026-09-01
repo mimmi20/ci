@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   install-php:
-    name: "Install PHP dependencies"
+    name: "Install dependencies on PHP ${{ matrix.php-version }}"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
