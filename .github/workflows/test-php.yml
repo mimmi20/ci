@@ -122,7 +122,7 @@ jobs:
           composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
 
       - name: "Run unit tests with phpunit/phpunit${{ inputs.test-name }}"
-        run: "vendor/bin/phpunit -c phpunit.xml --no-coverage --display-warnings --display-deprecations"
+        run: "vendor/bin/phpunit --configuration=phpunit.xml --no-coverage --display-warnings --display-deprecations"
 
   phpunit-code-coverage:
     name: "Code Coverage with PHPUnit on PHP ${{ matrix.php-version }}"
@@ -188,12 +188,14 @@ jobs:
         run: "mkdir -p .build/coverage"
 
       - name: "Collect code coverage with Xdebug and phpunit/phpunit${{ inputs.test-name }}"
-        run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations"
+        run: "vendor/bin/phpunit --configuration=phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations"
+        continue-on-error: true
 
       - name: "Upload coverage to Codecov"
         uses: "codecov/codecov-action@v7.0.0"
-        if: inputs.upload-codecov == true
+        if: ${{ inputs.upload-codecov == true && !cancelled() }}
         with:
+          report_type: "coverage"
           files: ".build/coverage/clover.xml"
           flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
@@ -205,18 +207,20 @@ jobs:
       - name: "Upload test results to Codecov"
         if: ${{ inputs.upload-codecov == true && !cancelled() }}
         continue-on-error: true
-        uses: "codecov/test-results-action@v1"
+        uses: "codecov/codecov-action@v7.0.0"
         with:
+          report_type: "test_results"
           files: ".build/coverage/phpunit.junit.xml"
           flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }},${{ inputs.upload-flag }}"
           verbose: false
           disable_search: true
+          disable_file_fixes: true
         env:
           CODECOV_TOKEN: "${{ secrets.ENV_CODECOV_TOKEN }}"
 
       - name: "Upload coverage to Codeclimate"
         uses: "paambaati/codeclimate-action@v9.0.0"
-        if: inputs.upload-codeclimate == true
+        if: ${{ inputs.upload-codeclimate == true && !cancelled() }}
         continue-on-error: true
         env:
           CC_TEST_REPORTER_ID: "${{ secrets.ENV_CODECLIMATE_API_KEY }}"
@@ -226,7 +230,7 @@ jobs:
 
       - name: "Upload coverage to Coveralls"
         uses: "coverallsapp/github-action@v2.3.8"
-        if: inputs.upload-coveralls == true
+        if: ${{ inputs.upload-coveralls == true && !cancelled() }}
         continue-on-error: true
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
