@@ -192,7 +192,7 @@ jobs:
         continue-on-error: true
 
       - name: "Upload coverage to Codecov"
-        uses: "codecov/codecov-action@v7.0.0"
+        uses: "codecov/codecov-action@v7.1.0"
         if: ${{ inputs.upload-codecov == true && !cancelled() }}
         with:
           report_type: "coverage"
@@ -207,7 +207,7 @@ jobs:
       - name: "Upload test results to Codecov"
         if: ${{ inputs.upload-codecov == true && !cancelled() }}
         continue-on-error: true
-        uses: "codecov/codecov-action@v7.0.0"
+        uses: "codecov/codecov-action@v7.1.0"
         with:
           report_type: "test_results"
           files: ".build/coverage/phpunit.junit.xml"
