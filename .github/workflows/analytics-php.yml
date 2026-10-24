@@ -44,7 +44,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     if: inputs.skip-php-cs-fixer == false
 
@@ -101,7 +101,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 30
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     if: inputs.skip-phpcs == false
 
@@ -170,7 +170,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 20
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     if: inputs.skip-phpstan == false
 
@@ -236,7 +236,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
-    continue-on-error: ${{ '8.5' == matrix.php-version || '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     if: inputs.skip-rector == false
 
