@@ -68,7 +68,7 @@ jobs:
 
     timeout-minutes: 40
 
-    continue-on-error: ${{ '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     strategy:
       fail-fast: false
@@ -131,7 +131,7 @@ jobs:
 
     timeout-minutes: 120
 
-    continue-on-error: ${{ '8.6' == matrix.php-version }}
+    continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
     strategy:
       fail-fast: false
