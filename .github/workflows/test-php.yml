@@ -132,7 +132,7 @@ jobs:
 
     runs-on: "${{ matrix.operating-system }}"
 
-    timeout-minutes: 120
+    timeout-minutes: 150
 
     continue-on-error: ${{ '8.6' == matrix.php-version || '8.7' == matrix.php-version }}
 
@@ -191,6 +191,7 @@ jobs:
         run: "mkdir -p .build/coverage"
 
       - name: "Collect code coverage with Xdebug and phpunit/phpunit${{ inputs.test-name }}"
+        timeout-minutes: 30
         run: "vendor/bin/phpunit --configuration=phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml --display-warnings --display-deprecations${{ inputs.option-phpunit }}"
         continue-on-error: true
 
