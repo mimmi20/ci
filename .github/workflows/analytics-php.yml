@@ -76,12 +76,15 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, cs2pr"
+          tools: "composer:v2"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
           debug: false
+
+      - name: "Require staabm/annotate-pull-request-from-checkstyle"
+        run: "composer require --no-update --no-interaction --prefer-dist --prefer-stable staabm/annotate-pull-request-from-checkstyle" # install cs2pr
 
       - name: "Update dependencies with composer"
         uses: "ramsey/composer-install@4.0.0"
@@ -90,11 +93,11 @@ jobs:
           composer-options: "${{ inputs.composer-options }}"
 
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer fix --dry-run -vv --diff --show-progress=dots"
+        run: "vendor/bin/php-cs-fixer check -vv --diff --show-progress=dots"
         continue-on-error: true
 
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer fix --dry-run --show-progress=none --format=checkstyle | cs2pr"
+        run: "vendor/bin/php-cs-fixer fix --dry-run --show-progress=none --format=checkstyle | vendor/bin/cs2pr"
 
   phpcs:
     name: "Check Coding Standards with PHPCS on PHP ${{ matrix.php-version }}"
@@ -133,12 +136,15 @@ jobs:
           extensions: "none, phar, json, opcache, curl, iconv, mbstring, ${{ inputs.extensions }}"
           ini-values: "${{ inputs.ini-values }}"
           coverage: "none"
-          tools: "composer:v2, cs2pr"
+          tools: "composer:v2"
         env:
           fail-fast: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           phpts: "nts"
           debug: false
+
+      - name: "Require staabm/annotate-pull-request-from-checkstyle"
+        run: "composer require --no-update --no-interaction --prefer-dist --prefer-stable staabm/annotate-pull-request-from-checkstyle" # install cs2pr
 
       - name: "Update dependencies with composer"
         uses: "ramsey/composer-install@4.0.0"
@@ -155,7 +161,7 @@ jobs:
 
       - name: "Show PHPCS results in PR"
         if: ${{ always() && steps.phpcs.outcome == 'failure' }}
-        run: "cs2pr ./phpcs-report.xml"
+        run: "vendor/bin/cs2pr ./phpcs-report.xml"
 
   phpstan:
     name: "Static Code Analysis with PHPStan on PHP ${{ matrix.php-version }}"
