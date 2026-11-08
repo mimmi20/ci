@@ -85,7 +85,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: "Summary"
-        if: ${{ steps.actionlint.outputs.exit-code != 0 }}  # example usage, do echo only when actionlint action failed
+        if: ${{ always() && steps.actionlint.outputs.exit-code != 0 }}  # example usage, do echo only when actionlint action failed
         run: |
           echo "Used actionlint version ${{ steps.actionlint.outputs.version-semver }}"
           echo "Used actionlint release ${{ steps.actionlint.outputs.version-tag }}"
